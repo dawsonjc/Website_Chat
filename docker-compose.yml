@@ -1,0 +1,42 @@
+version: '3.1'
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  mycassandra:
+    image: cassandra:5.0.0
+    container_name: mycassandra
+    build:
+      context: ./cassandra
+      dockerfile: Dockerfile
+    ports:
+      - "9042:9042"
+    volumes:
+      - ./cassandra/project.cql:/docker-entrypoint-initdb.d/project.cql
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD", "cqlsh", "-e", "describe keyspaces" ]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  chatapp:
+    image: openjdk:11-alpine
+    container_name: chatapp
+    depends_on:
+      - mycassandra
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    environment:
+      - SPRING_DATA_CASSANDRA_CONTACT_POINTS=mycassandra
+      - SPRING_DATA_CASSANDRA_PORT=9042
+      - SPRING_DATA_CASSANDRA_KEYSPACE_NAME=mykeyspacename
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+

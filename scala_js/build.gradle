@@ -1,0 +1,73 @@
+plugins {
+    id 'org.podval.tools.scalajs' version '0.9.14'
+}
+
+repositories {
+    mavenCentral()
+}
+
+final String scalaVersion = "3.7.3"
+final String scala2versionMinor = "2.13"
+final String scalaJsVersion = "1.20.1"
+
+scala.scalaVersion = scalaVersion
+dependencies {
+    implementation             scalaBackend.scalaDependency ('org.scala-js'  , 'scalajs-library'          , '1.20.1'                   , {it.scala2().jvm()}) // sets scalaBackend.backendVersion
+    implementation             scalaBackend.scalaDependency ('org.scala-js'  , 'scalajs-dom'              , '2.8.1')
+    if (scalaBackend.scala3) {
+        implementation           scalaBackend.scalaDependency ('org.scala-lang', 'scala3-library'           , scalaBackend.scalaVersion  , {it.scala3()})
+    }
+    scalajs                    scalaBackend.pluginDependency('org.scala-js'  , 'scalajs-linker'           , scalaBackend.backendVersion, {it.scala2()})
+    scalajs                    scalaBackend.pluginDependency('org.scala-js'  , 'scalajs-sbt-test-adapter' , scalaBackend.backendVersion, {it.scala2()})
+    scalajs                    scalaBackend.pluginDependency('org.scala-js'  , 'scalajs-env-jsdom-nodejs' , '1.1.1'                    , {it.scala2()})
+    if (!scalaBackend.scala3) {
+        scalaCompilerPlugins     scalaBackend.scalaDependency ('org.scala-js'  , 'scalajs-compiler'         , scalaBackend.backendVersion, {it.scala2().scalaCompilerPlugin()})
+    }
+    if (!scalaBackend.scala3 && scalaBackend.nonJvmJUnit4present) {
+        testScalaCompilerPlugins scalaBackend.scalaDependency ('org.scala-js'  , 'scalajs-junit-test-plugin', scalaBackend.backendVersion, {it.scala2().scalaCompilerPlugin()})
+    }
+    testRuntimeOnly            scalaBackend.scalaDependency ('org.scala-js'  , 'scalajs-test-bridge'      , scalaBackend.backendVersion, {it.scala2().jvm()})
+
+    // Other dependencies
+    implementation 'io.udash:udash-jquery_sjs1_2.13:3.4.0'
+    //implementation "org.scala-js:scalajs-dom_sjs1_$scala2versionMinor:2.0.0"
+
+}
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.with {
+        additionalParameters = [ '-scalajs' ]
+    }
+}
+
+link {
+    doLast {
+        project.sync {
+            from link.JSDirectory
+            into "$rootDir/frontend/src/main/webapp/static/js"
+
+            println "fuck"
+        }
+    }
+    optimization     = 'Fast'
+    moduleKind       = 'NoModule'
+    moduleSplitStyle = 'FewestModules'
+    esVersion        = '2021'
+    smallModulesFor  = []
+    prettyPrint      = false
+    experimentalUseWebAssembly = false
+
+    moduleInitializers {
+        main {
+            className = 'com.brewery.web.frontend.Main'
+            mainMethodName = 'main'
+            mainMethodHasArgs = true
+        }
+    }
+
+    println "asdf"
+}
+
+assemble {
+    dependsOn tasks.named("link")
+}
+

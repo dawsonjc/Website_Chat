@@ -1,0 +1,27 @@
+plugins {
+    id 'org.springframework.boot' version '3.5.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id "war"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+// https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api
+    implementation("jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.2")
+    implementation("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.30")
+
+    //implementation project(":scala_js")
+    implementation project(":backend")
+}
+
+
+bootRun {
+    dependsOn(":scala_js:link")
+    mainClass = "com.brewery.web.BackendApplication"
+}
+
+group = "org.example"
+version = "1.0-SNAPSHOT"
