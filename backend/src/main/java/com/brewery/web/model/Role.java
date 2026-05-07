@@ -10,6 +10,22 @@ import java.util.UUID;
 
 @Table(value = "roles")
 public class Role {
+    public enum Name {
+        ADMIN("Admin"),
+        MODERATOR("Moderator"),
+        USER("User");
+        private final String name;
+
+        Name(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return this.name;
+        }
+
+    };
 
     @Id
     @Column(value = "roleid")

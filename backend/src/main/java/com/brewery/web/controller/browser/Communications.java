@@ -1,6 +1,7 @@
 package com.brewery.web.controller.browser;
 
 import com.brewery.web.dto.ConversationDTO;
+import com.brewery.web.model.Role;
 import com.brewery.web.model.message.Message;
 import com.brewery.web.model.User;
 import com.brewery.web.services.MessagesService;
@@ -69,7 +70,7 @@ public class Communications {
         User user = (User) request.getSession().getAttribute("current_user");
         Message message = this.service.findMessage(messageId);
 
-        if(user.getRoles().contains("Admin")) {
+        if(user.getRoles().contains(Role.Name.ADMIN.toString())) {
             this.service.deleteMessage(message);
             responseJson.put("success", true);
 
@@ -81,15 +82,9 @@ public class Communications {
 
         List<ConversationDTO> userConversations = user.getConversations();
 
-        boolean notFound = true;
-        for(ConversationDTO convos : userConversations) {
-            if(convos.conversationId().equals(conversationId)) {
-                notFound = false;
-            }
-        }
-        if(notFound) {
+        if(userConversations.stream().noneMatch((dto) -> dto.conversationId().equals(conversationId))) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseJson);
-        }
+        };
 
         if(!message.getFromUserId().equals(user.getUserId())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseJson);
