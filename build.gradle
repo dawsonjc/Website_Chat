@@ -3,6 +3,12 @@ plugins {
     id "war"
 }
 
-dependencies {
+dependencies {}
 
+tasks.register("runApp") {
+    dependsOn(":frontend:bootRun")
+}
+
+tasks.register("runAuth") {
+    dependsOn(":auth_service:kt_service:kobwebStart")
 }

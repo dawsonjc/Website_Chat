@@ -10,10 +10,6 @@ pluginManagement {
 
 rootProject.name = 'Website_Chat'
 
-include ':scala_js', ':frontend', ':backend'//, ':auth_service:auth_service_backend_ruby'
-//        ':auth_service:auth_service_frontend_react'
+include ':scala_js', ':frontend', ':backend', ':auth_service:kt_service'
 
-//project(':auth_service:auth_service_backend_ruby').projectDir = file('auth_service/auth_service_backend_ruby')
-
-//project(':auth_service:auth_service_frontend_react').projectDir =
-//        file('auth_service/auth_service_frontend_react')
+project(':auth_service:kt_service').projectDir = file('auth_service/kt_service')

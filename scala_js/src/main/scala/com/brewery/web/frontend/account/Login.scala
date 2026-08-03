@@ -42,9 +42,7 @@ object Login {
             try {
                 HelpFunctions.setCookie("User-Information", user.toJsObject, Some(1));
             } catch {
-                case e: js.JavaScriptException => {
-                
-                }
+                case e: js.JavaScriptException => {}
             }
             
             val url: URL = new URL(window.location.href);
