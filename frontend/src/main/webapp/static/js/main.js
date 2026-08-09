@@ -1289,8 +1289,8 @@ function $p_Lcom_brewery_web_frontend_conversation_ConversationBox$__initToolTip
   ($m_Lio_udash_wrappers_jquery_JQuery$(), new $c_Lio_udash_wrappers_jquery_JQuery$JQueryWrapper(\u03b4messages)).on__T__T__F2__Lio_udash_wrappers_jquery_JQuery("contextmenu", ".user-message-box", new $c_sr_AbstractFunction2_$$Lambda$286cbfc6187197affcadc8465aaec93d6b7d20dc(((element, event) => {
     event.preventDefault();
     var this$ = $(element);
-    var \u03b44$ = $("#tool-tip");
-    \u03b44$.remove();
+    var \u03b41$ = $("#tool-tip");
+    \u03b41$.remove();
     var \u03b4toolTip = $($m_sc_StringOps$().stripMargin$extension__T__C__T("<div id=\"tool-tip\">\r\n                  | <ul>\r\n                  |     <li data-action=\"reply\">Reply</li>\r\n                  |     <li data-action=\"add-friend\">Add Friend</li>\r\n                  | </ul>\r\n                  |</div>", 124));
     var this$38 = $m_sci_Map$();
     var $x_2 = $m_sr_ScalaRunTime$();
@@ -1361,31 +1361,36 @@ function $p_Lcom_brewery_web_frontend_conversation_ConversationBox$__prependMess
     $m_Lio_udash_wrappers_jquery_JQuery$();
     var jquery = \u03b4html.find(".delete-message");
     new $c_Lio_udash_wrappers_jquery_JQuery$JQueryWrapper(jquery).on__T__F2__Lio_udash_wrappers_jquery_JQuery("click", new $c_sr_AbstractFunction2_$$Lambda$286cbfc6187197affcadc8465aaec93d6b7d20dc(((element, jQueryEvent) => {
-      var this$ = $(element);
-      var $x_1 = $m_Lcom_brewery_web_frontend_HelpFunctions$();
-      var \u03b45$ = this$.parent();
-      var formData = $x_1.getFormData__Lio_udash_wrappers_jquery_JQuery__sci_Map(\u03b45$.parent().find("form"));
-      var $x_7 = $;
-      var $x_6 = $m_sr_ScalaRunTime$();
-      var $x_5 = new $c_T2("url", "/message/delete");
-      var $x_4 = new $c_T2("method", "DELETE");
-      var $x_2 = $m_sr_ScalaRunTime$();
-      var s = $dp_toString__T($n($n(formData).apply__O__O("message-id")));
-      var fields = $x_2.wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([new $c_T2("messageId", s)]));
-      var _2 = $m_sjs_js_special_package$().objectLiteral__sci_Seq__sjs_js_Object(fields);
-      var $x_3 = new $c_T2("data", _2);
-      var _2$1 = $m_sjs_js_Any$().fromFunction3__F3__sjs_js_Function3(new $c_sr_AbstractFunction3_$$Lambda$26e0a25d9b29f6b82ea50ab7badf4fb70c5c74e1(((data, textStatus, jqXHR) => {
-        $as_T(textStatus);
-        var \u03b46$ = this$.parent();
-        var \u03b47$ = \u03b46$.parent();
-        return \u03b47$.remove();
-      })));
-      var fields$1 = $x_6.wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([$x_5, $x_4, $x_3, new $c_T2("success", _2$1)]));
-      return $x_7.ajax($m_sjs_js_special_package$().objectLiteral__sci_Seq__sjs_js_Object(fields$1));
+      $p_Lcom_brewery_web_frontend_conversation_ConversationBox$__deleteMessage__Lorg_scalajs_dom_Element__Lio_udash_wrappers_jquery_JQueryEvent__V($m_Lcom_brewery_web_frontend_conversation_ConversationBox$(), element, jQueryEvent);
     })));
     messageBox.prepend(\u03b4html);
     i = ((1 + i) | 0);
   }
+}
+function $p_Lcom_brewery_web_frontend_conversation_ConversationBox$__deleteMessage__Lorg_scalajs_dom_Element__Lio_udash_wrappers_jquery_JQueryEvent__V($thiz, element, jQueryEvent) {
+  var this$ = $(element);
+  var $x_1 = $m_Lcom_brewery_web_frontend_HelpFunctions$();
+  var \u03b42$ = this$.parent();
+  var formData = $x_1.getFormData__Lio_udash_wrappers_jquery_JQuery__sci_Map(\u03b42$.parent().find("form"));
+  var $x_8 = $;
+  var $x_7 = $m_sr_ScalaRunTime$();
+  var $x_6 = new $c_T2("url", "/message/delete");
+  var $x_5 = new $c_T2("method", "DELETE");
+  var $x_3 = $m_sr_ScalaRunTime$();
+  var s = $dp_toString__T($n($n(formData).apply__O__O("message-id")));
+  var $x_2 = new $c_T2("messageId", s);
+  var s$1 = $thiz.Lcom_brewery_web_frontend_conversation_ConversationBox$__f_conversationId;
+  var fields = $x_3.wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([$x_2, new $c_T2("conversationId", s$1)]));
+  var _2 = $m_sjs_js_special_package$().objectLiteral__sci_Seq__sjs_js_Object(fields);
+  var $x_4 = new $c_T2("data", _2);
+  var _2$1 = $m_sjs_js_Any$().fromFunction3__F3__sjs_js_Function3(new $c_sr_AbstractFunction3_$$Lambda$26e0a25d9b29f6b82ea50ab7badf4fb70c5c74e1(((data, textStatus, jqXHR) => {
+    $as_T(textStatus);
+    var \u03b43$ = this$.parent();
+    var \u03b44$ = \u03b43$.parent();
+    return \u03b44$.remove();
+  })));
+  var fields$1 = $x_7.wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([$x_6, $x_5, $x_4, new $c_T2("success", _2$1)]));
+  $x_8.ajax($m_sjs_js_special_package$().objectLiteral__sci_Seq__sjs_js_Object(fields$1));
 }
 /** @constructor */
 function $c_Lcom_brewery_web_frontend_conversation_ConversationBox$() {
@@ -1427,35 +1432,15 @@ $c_Lcom_brewery_web_frontend_conversation_ConversationBox$.prototype.initialize_
   })));
   var \u03b4deleteMessage = $(".delete-message");
   ($m_Lio_udash_wrappers_jquery_JQuery$(), new $c_Lio_udash_wrappers_jquery_JQuery$JQueryWrapper(\u03b4deleteMessage)).on__T__F2__Lio_udash_wrappers_jquery_JQuery("click", new $c_sr_AbstractFunction2_$$Lambda$286cbfc6187197affcadc8465aaec93d6b7d20dc(((element$2, jQueryEvent$2) => {
-    var this$ = $(element$2);
-    var $x_8 = $m_Lcom_brewery_web_frontend_HelpFunctions$();
-    var \u03b41$ = this$.parent();
-    var formData = $x_8.getFormData__Lio_udash_wrappers_jquery_JQuery__sci_Map(\u03b41$.parent().find("form"));
-    var $x_14 = $;
-    var $x_13 = $m_sr_ScalaRunTime$();
-    var $x_12 = new $c_T2("url", "/message/delete");
-    var $x_11 = new $c_T2("method", "DELETE");
-    var $x_9 = $m_sr_ScalaRunTime$();
-    var s$2 = $dp_toString__T($n($n(formData).apply__O__O("message-id")));
-    var fields$2 = $x_9.wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([new $c_T2("messageId", s$2)]));
-    var _2$2 = $m_sjs_js_special_package$().objectLiteral__sci_Seq__sjs_js_Object(fields$2);
-    var $x_10 = new $c_T2("data", _2$2);
-    var _2$3 = $m_sjs_js_Any$().fromFunction3__F3__sjs_js_Function3(new $c_sr_AbstractFunction3_$$Lambda$26e0a25d9b29f6b82ea50ab7badf4fb70c5c74e1(((data$1, textStatus$2, jqXHR$1) => {
-      $as_T(textStatus$2);
-      var \u03b42$ = this$.parent();
-      var \u03b43$ = \u03b42$.parent();
-      return \u03b43$.remove();
-    })));
-    var fields$3 = $x_13.wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([$x_12, $x_11, $x_10, new $c_T2("success", _2$3)]));
-    return $x_14.ajax($m_sjs_js_special_package$().objectLiteral__sci_Seq__sjs_js_Object(fields$3));
+    $p_Lcom_brewery_web_frontend_conversation_ConversationBox$__deleteMessage__Lorg_scalajs_dom_Element__Lio_udash_wrappers_jquery_JQueryEvent__V($m_Lcom_brewery_web_frontend_conversation_ConversationBox$(), element$2, jQueryEvent$2);
   })));
   $m_Lio_udash_wrappers_jquery_JQuery$();
   var jquery = \u03b4messages.find(".message-date");
   new $c_Lio_udash_wrappers_jquery_JQuery$JQueryWrapper(jquery).each__F2__Lio_udash_wrappers_jquery_JQuery(new $c_sr_AbstractFunction2_$$Lambda$286cbfc6187197affcadc8465aaec93d6b7d20dc(((element$3, index) => {
     $uI(index);
-    var this$$1 = $(element$3);
-    var date = ($as_T(this$$1.html()) + " UTC");
-    return this$$1.html($m_Lcom_brewery_web_frontend_HelpFunctions$().formatDate__sjs_js_Date__T(new Date(date)));
+    var this$ = $(element$3);
+    var date = ($as_T(this$.html()) + " UTC");
+    return this$.html($m_Lcom_brewery_web_frontend_HelpFunctions$().formatDate__sjs_js_Date__T(new Date(date)));
   })));
   $p_Lcom_brewery_web_frontend_conversation_ConversationBox$__initToolTip__V(this);
 });

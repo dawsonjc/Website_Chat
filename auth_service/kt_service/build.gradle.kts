@@ -41,31 +41,20 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            // Shared client/server DTO serialization.
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
             implementation("com.varabyte.kobwebx:kobwebx-serialization-kotlinx:0.25.0")
         }
 
         jsMain.dependencies {
-            // Compose HTML + Kobweb.
             implementation("androidx.compose.runtime:runtime:1.11.2")
             implementation("org.jetbrains.compose.html:html-core:1.11.1")
             implementation("com.varabyte.kobweb:kobweb-core:0.25.0")
             implementation("com.varabyte.kobweb:kobweb-silk:0.25.0")
 
-            // Optional icon pack. Remove it if unused.
             implementation("com.varabyte.kobwebx:silk-icons-lucide:0.25.0")
 
-            /*
-             * Optional jQuery.
-             *
-             * Kobweb/Compose already owns and updates the DOM, so prefer Compose
-             * event handlers and state for normal UI code. jQuery is most useful
-             * when integrating an older jQuery plugin or imperative JS library.
-             */
             implementation(npm("jquery", "4.0.0"))
 
-            // Tailwind CSS 4 through PostCSS/Webpack.
             implementation(devNpm("tailwindcss", "4.3.3"))
             implementation(devNpm("@tailwindcss/postcss", "4.3.3"))
             implementation(devNpm("postcss", "8.5.23"))
@@ -73,7 +62,6 @@ kotlin {
         }
 
         jvmMain.dependencies {
-            // Required for @Api routes and other Kobweb backend APIs.
             implementation("com.varabyte.kobweb:kobweb-api:0.25.0")
         }
     }

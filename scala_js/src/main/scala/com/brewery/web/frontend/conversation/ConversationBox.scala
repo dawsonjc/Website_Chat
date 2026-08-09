@@ -31,20 +31,7 @@ object ConversationBox {
         });
         
         val $deleteMessage: JQuery = jQ(".delete-message");
-        $deleteMessage.on(EventName.click, (element: Element, jQueryEvent: JQueryEvent) => {
-            val $this = jQ(element);
-            val formData: Map[String, Any] = HelpFunctions.getFormData($this.parent().parent().find("form"));
-            jQ.ajax(js.Dynamic.literal(
-                url = "/message/delete",
-                method = "DELETE",
-                data = js.Dynamic.literal(
-                    messageId = formData("message-id").toString
-                ),
-                success = (data: js.Any, textStatus: String, jqXHR: JQueryXHR) => {
-                    $this.parent().parent().remove();
-                }
-            ).asInstanceOf[JQueryAjaxSettings])
-        });
+        $deleteMessage.on(EventName.click, deleteMessage);
         
         $messages.find(".message-date").each((element: Element, index: Int) => {
             val $this = jQ(element);
@@ -155,22 +142,25 @@ object ConversationBox {
         for(message <- messages) {
             val m = new Message(message);
             val $html = m.toJQueryElement();
-            $html.find(".delete-message").on(EventName.click, (element: Element, jQueryEvent: JQueryEvent) => {
-                val $this = jQ(element);
-                val formData: Map[String, Any] = HelpFunctions.getFormData($this.parent().parent().find("form"));
-                jQ.ajax(js.Dynamic.literal(
-                    url = "/message/delete",
-                    method = "DELETE",
-                    data = js.Dynamic.literal(
-                        messageId = formData("message-id").toString
-                    ),
-                    success = (data: js.Any, textStatus: String, jqXHR: JQueryXHR) => {
-                        $this.parent().parent().remove();
-                    }
-                ).asInstanceOf[JQueryAjaxSettings])
-            });
+            $html.find(".delete-message").on(EventName.click, deleteMessage);
             
             messageBox.prepend($html);
         }
+    }
+    
+    private def deleteMessage(element: Element, jQueryEvent: JQueryEvent): Unit = {
+        val $this = jQ(element);
+        val formData: Map[String, Any] = HelpFunctions.getFormData($this.parent().parent().find("form"));
+        jQ.ajax(js.Dynamic.literal(
+            url = "/message/delete",
+            method = "DELETE",
+            data = js.Dynamic.literal(
+                messageId = formData("message-id").toString,
+                conversationId = conversationId
+            ),
+            success = (data: js.Any, textStatus: String, jqXHR: JQueryXHR) => {
+                $this.parent().parent().remove();
+            }
+        ).asInstanceOf[JQueryAjaxSettings])
     }
 }

@@ -1,42 +1,56 @@
-version: '3.1'
-networks:
-  app-network:
-    driver: bridge
-
 services:
-  mycassandra:
-    image: cassandra:5.0.0
-    container_name: mycassandra
-    build:
-      context: ./cassandra
-      dockerfile: Dockerfile
+  cassandra:
+    image: cassandra:4.1
+    container_name: website-chat-cassandra
     ports:
       - "9042:9042"
+    environment:
+      CASSANDRA_CLUSTER_NAME: website-chat
+      CASSANDRA_DC: datacenter1
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
     volumes:
-      - ./cassandra/project.cql:/docker-entrypoint-initdb.d/project.cql
-    networks:
-      - app-network
+      - cassandra-data:/var/lib/cassandra
     healthcheck:
-      test: [ "CMD", "cqlsh", "-e", "describe keyspaces" ]
-      interval: 10s
-      retries: 5
-      timeout: 5s
+      test: ["CMD-SHELL", "cqlsh -e 'DESCRIBE KEYSPACES' localhost 9042"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
 
-  chatapp:
-    image: openjdk:11-alpine
-    container_name: chatapp
+  cassandra-init:
+    image: cassandra:4.1
+    container_name: website-chat-cassandra-init
     depends_on:
-      - mycassandra
+      cassandra:
+        condition: service_healthy
+    volumes:
+      - ./cassandra/project.cql:/project.cql
+    command: >
+      bash -c "
+      echo Waiting for Cassandra;
+      until cqlsh cassandra 9042 -e 'DESCRIBE KEYSPACES'; do
+        sleep 5;
+      done;
+      echo Running project.cql;
+      cqlsh cassandra 9042 -f /project.cql;
+      echo Cassandra initialization complete;
+      "
+
+  frontend:
     build:
       context: .
-      dockerfile: Dockerfile
-
-    environment:
-      - SPRING_DATA_CASSANDRA_CONTACT_POINTS=mycassandra
-      - SPRING_DATA_CASSANDRA_PORT=9042
-      - SPRING_DATA_CASSANDRA_KEYSPACE_NAME=mykeyspacename
+      dockerfile: frontend/Dockerfile
+    container_name: website-chat-frontend
+    depends_on:
+      cassandra:
+        condition: service_healthy
+      cassandra-init:
+        condition: service_completed_successfully
     ports:
       - "8080:8080"
-    networks:
-      - app-network
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      CASSANDRA_CONTACT_POINTS: cassandra
+      CASSANDRA_PORT: "9042"
 
+volumes:
+  cassandra-data:

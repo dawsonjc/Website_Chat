@@ -83,10 +83,12 @@ public class Communications {
         List<ConversationDTO> userConversations = user.getConversations();
 
         if(userConversations.stream().noneMatch((dto) -> dto.conversationId().equals(conversationId))) {
+            System.err.println("User does not have access to conversation BY conversationId");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseJson);
         };
 
         if(!message.getFromUserId().equals(user.getUserId())) {
+            System.err.println("User does not have access to conversation BY id");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseJson);
         }
 

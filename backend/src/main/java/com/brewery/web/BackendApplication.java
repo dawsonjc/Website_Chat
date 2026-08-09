@@ -10,22 +10,5 @@ public class BackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
-
-        Printer<Integer> printer = new Printer<Integer>(1);
-
-    }
-
-    public static class Printer<T extends Object> {
-        T thing;
-
-
-        public Printer(T thing) {
-            this.thing = thing;
-        }
-
-
-        public void print() {
-            System.out.println(this.thing.toString());
-        }
     }
 }

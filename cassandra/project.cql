@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS mykeyspacename.user_role (
      userid UUID,
      roleid UUID,
      role_name TEXT,
+     username TEXT,
 
      PRIMARY KEY ( userid, roleid )
 );
