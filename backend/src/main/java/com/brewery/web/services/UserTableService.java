@@ -36,7 +36,7 @@ public class UserTableService {
     public User getUserById(UUID id) {
         User user = this.repo.findById(id).orElse(null);
         if(user != null) {
-            this.setBullshit(user);
+            this.populateUserRelations(user);
         }
         return user;
     }
@@ -54,12 +54,12 @@ public class UserTableService {
         if(!BCrypt.checkpw(password, user.getPassword())) {
             return null;
         }
-        this.setBullshit(user);
+        this.populateUserRelations(user);
 
         return user;
     }
 
-    private void setBullshit(User user) {
+    private void populateUserRelations(User user) {
         user.setRoles(this.getUsersRolesByUser(user));
         List<ConversationDTO> conversations = this.conversationService.getConversationsByUserId(user.getUserId());
         conversations.add(this.conversationService.getGlobalChat());
