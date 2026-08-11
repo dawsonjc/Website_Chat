@@ -1,5 +1,6 @@
 package com.brewery.web.dto.event;
 
+import com.brewery.web.model.RecordStatus;
 import com.brewery.web.model.event.Event;
 import com.brewery.web.model.event.EventType;
 import com.brewery.web.model.event.EventsByType;
@@ -16,7 +17,7 @@ public record EventDTO(
         UUID eventId,
         Instant createDate,
         Instant updateDate,
-        String status,
+        RecordStatus status,
         EventType eventType,
         UUID actorId,
         String actorName,
@@ -95,7 +96,7 @@ public record EventDTO(
         private UUID eventId;
         private Instant createDate;
         private Instant updateDate;
-        private String status;
+        private RecordStatus status;
         private EventType eventType;
         private UUID actorId;
         private String actorName;
@@ -125,7 +126,7 @@ public record EventDTO(
             this.updateDate = updateDate;
             return this;
         }
-        public EventDTO.Builder withStatus(String status) {
+        public EventDTO.Builder withStatus(RecordStatus status) {
             this.status = status;
             return this;
         }

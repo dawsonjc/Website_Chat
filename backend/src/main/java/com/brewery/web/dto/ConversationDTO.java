@@ -1,6 +1,7 @@
 package com.brewery.web.dto;
 
 import com.brewery.web.model.Conversation;
+import com.brewery.web.model.RecordStatus;
 
 import java.time.Instant;
 import java.util.Set;
@@ -10,7 +11,7 @@ public record ConversationDTO(
         UUID conversationId,
         Instant createDate,
         Instant updateDate,
-        String status,
+        RecordStatus status,
         String name,
         Set<UUID> users
 ) {

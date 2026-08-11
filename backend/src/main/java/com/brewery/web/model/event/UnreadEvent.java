@@ -1,5 +1,6 @@
 package com.brewery.web.model.event;
 
+import com.brewery.web.model.RecordStatus;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
@@ -28,7 +29,7 @@ public class UnreadEvent {
 
     @Column(value = "status")
     @CassandraType(type = CassandraType.Name.TEXT)
-    private String status;
+    private RecordStatus status;
 
     @Column(value = "event_type")
     @CassandraType(type = CassandraType.Name.TEXT)
@@ -80,7 +81,7 @@ public class UnreadEvent {
         return updateDate;
     }
 
-    public String getStatus() {
+    public RecordStatus getStatus() {
         return status;
     }
 
@@ -121,7 +122,7 @@ public class UnreadEvent {
         private UUID eventId;
         private Instant createDate;
         private Instant updateDate;
-        private String status;
+        private RecordStatus status;
         private EventType eventType;
         private UUID actorId;
         private String actorName;
@@ -149,7 +150,7 @@ public class UnreadEvent {
             this.updateDate = updateDate;
             return this;
         }
-        public UnreadEvent.Builder withStatus(String status) {
+        public UnreadEvent.Builder withStatus(RecordStatus status) {
             this.status = status;
             return this;
         }

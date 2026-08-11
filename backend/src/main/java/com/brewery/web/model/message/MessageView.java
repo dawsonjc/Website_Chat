@@ -1,5 +1,6 @@
 package com.brewery.web.model.message;
 
+import com.brewery.web.model.RecordStatus;
 import com.brewery.web.model.message.Message;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
@@ -31,7 +32,7 @@ public class MessageView {
 
     @Column(value = "status")
     @CassandraType(type = CassandraType.Name.TEXT)
-    private String status;
+    private RecordStatus status;
 
     @Column(value = "from_user_id")
     @CassandraType(type = CassandraType.Name.UUID)
@@ -56,7 +57,7 @@ public class MessageView {
     public MessageView() {}
 
     public MessageView(UUID messageId, Instant createDate, Instant updateDate,
-                       String status, UUID conversationId, UUID fromUserId, String fromUsername,
+                       RecordStatus status, UUID conversationId, UUID fromUserId, String fromUsername,
                        UUID toUserId, String toUsername, String content
     ) {
         this.messageId = messageId;

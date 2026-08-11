@@ -35,7 +35,7 @@ public class User {
 
     @Column(value = "status")
     @CassandraType(type = CassandraType.Name.TEXT)
-    private String status;
+    private RecordStatus status;
 
     @Column(value = "username")
     @CassandraType(type = CassandraType.Name.TEXT)
@@ -75,7 +75,7 @@ public class User {
 
     @Column(value = "account_verification_status")
     @CassandraType(type = CassandraType.Name.TEXT)
-    private String accountVerificationStatus;
+    private VerificationStatus accountVerificationStatus;
 
     @Column(value = "two_factor_authentication")
     @CassandraType(type = CassandraType.Name.BOOLEAN)
@@ -101,11 +101,11 @@ public class User {
 
     public User() {}
 
-    public User(UUID userId, Instant createDate, Instant updateDate, String status,
+    public User(UUID userId, Instant createDate, Instant updateDate, RecordStatus status,
                 String username, String email, String password, String firstName,
                 String lastName, String fullName,
                 String languagePreference, String timezone, Instant lastLoginDate,
-                String accountVerificationStatus, Boolean twoFactorAuthentication,
+                VerificationStatus accountVerificationStatus, Boolean twoFactorAuthentication,
                 Set<UUID> friendsConnections, Set<UUID> blockedUsers, UUID apiAuthToken
     ) {
         this.userId = userId;
@@ -126,6 +126,34 @@ public class User {
         this.friendsConnections = friendsConnections;
         this.blockedUsers = blockedUsers;
         this.apiAuthToken = apiAuthToken;
+    }
+
+    public enum VerificationStatus {
+        PENDING("Pending"),
+        VERIFIED("Verified"),
+        BLOCKED("Blocked");
+
+        private final String status;
+        VerificationStatus(String status) {
+            this.status = status;
+        }
+
+        public String getStatus() {
+            return this.status;
+        }
+
+        public static VerificationStatus getStatus(String status) {
+            for (VerificationStatus s : VerificationStatus.values()) {
+                if (s.getStatus().equals(status)) {
+                    return s;
+                }
+            }
+            return null;
+        }
+
+        public String toString() {
+            return this.status;
+        }
     }
 
     public UUID getUserId() {
@@ -152,11 +180,11 @@ public class User {
         this.updateDate = updateDate;
     }
 
-    public String getStatus() {
+    public RecordStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RecordStatus status) {
         this.status = status;
     }
 
@@ -232,11 +260,11 @@ public class User {
         this.lastLoginDate = lastLoginDate;
     }
 
-    public String getAccountVerificationStatus() {
+    public VerificationStatus getAccountVerificationStatus() {
         return accountVerificationStatus;
     }
 
-    public void setAccountVerificationStatus(String accountVerificationStatus) {
+    public void setAccountVerificationStatus(VerificationStatus accountVerificationStatus) {
         this.accountVerificationStatus = accountVerificationStatus;
     }
 

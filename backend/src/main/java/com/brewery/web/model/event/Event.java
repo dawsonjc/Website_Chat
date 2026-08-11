@@ -1,5 +1,6 @@
 package com.brewery.web.model.event;
 
+import com.brewery.web.model.RecordStatus;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
@@ -33,7 +34,7 @@ public class Event {
 
     @Column(value = "status")
     @CassandraType(type = CassandraType.Name.TEXT)
-    private String status;
+    private RecordStatus status;
 
     @Column(value = "event_type")
     @CassandraType(type = CassandraType.Name.TEXT)
@@ -95,7 +96,7 @@ public class Event {
         return this.updateDate;
     }
 
-    public String getStatus() {
+    public RecordStatus getStatus() {
         return this.status;
     }
 
@@ -145,7 +146,7 @@ public class Event {
         private UUID eventId;
         private Instant createDate;
         private Instant updateDate;
-        private String status;
+        private RecordStatus status;
         private EventType eventType;
         private UUID actorId;
         private String actorName;
@@ -175,7 +176,7 @@ public class Event {
             this.updateDate = updateDate;
             return this;
         }
-        public Event.Builder withStatus(String status) {
+        public Event.Builder withStatus(RecordStatus status) {
             this.status = status;
             return this;
         }

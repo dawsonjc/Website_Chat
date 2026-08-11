@@ -1,5 +1,6 @@
 package com.brewery.web.model.message;
 
+import com.brewery.web.model.RecordStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
@@ -27,7 +28,7 @@ public class Message {
 
     @Column(value = "status")
     @CassandraType(type = CassandraType.Name.TEXT)
-    private String status;
+    private RecordStatus status;
 
     @Column(value = "conversation_id")
     @CassandraType(type = CassandraType.Name.UUID)
@@ -66,14 +67,14 @@ public class Message {
                 this.messageId = UUID.randomUUID();
                 this.createDate = now;
                 this.updateDate = now;
-                this.status = "Active";
+                this.status = RecordStatus.ACTIVE;
             }
         }
     }
 
     public Message(
             UUID messageId, Instant createDate, Instant updateDate,
-            String status, UUID conversationId, UUID fromUserId, String fromUsername,
+            RecordStatus status, UUID conversationId, UUID fromUserId, String fromUsername,
             UUID toUserId, String toUsername, String content
     ) {
         this.messageId = messageId;
@@ -112,11 +113,11 @@ public class Message {
         this.updateDate = updateDate;
     }
 
-    public String getStatus() {
+    public RecordStatus getStatus() {
         return this.status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RecordStatus status) {
         this.status = status;
     }
 

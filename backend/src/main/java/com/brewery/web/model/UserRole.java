@@ -21,7 +21,7 @@ public class UserRole {
 
     @Column(value = "status")
     @CassandraType(type = CassandraType.Name.TEXT)
-    private String status;
+    private RecordStatus status;
 
     @Column(value = "roleid")
     @CassandraType(type = CassandraType.Name.UUID)
@@ -38,7 +38,7 @@ public class UserRole {
 
     public UserRole() {}
 
-    public UserRole(Instant createDate, Instant updateDate, String status, UUID roleId, String roleName, UUID userId) {
+    public UserRole(Instant createDate, Instant updateDate, RecordStatus status, UUID roleId, String roleName, UUID userId) {
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.status = status;
@@ -63,11 +63,11 @@ public class UserRole {
         this.updateDate = updateDate;
     }
 
-    public String getStatus() {
-        return status;
+    public RecordStatus getStatus() {
+        return this.status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RecordStatus status) {
         this.status = status;
     }
 

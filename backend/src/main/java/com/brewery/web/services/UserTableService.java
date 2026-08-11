@@ -1,6 +1,7 @@
 package com.brewery.web.services;
 
 import com.brewery.web.dto.ConversationDTO;
+import com.brewery.web.model.RecordStatus;
 import com.brewery.web.model.Role;
 import com.brewery.web.model.User;
 import com.brewery.web.model.UserRole;
@@ -85,12 +86,12 @@ public class UserTableService {
         user.setUserId(userId);
         user.setCreateDate(now);
         user.setUpdateDate(now);
-        user.setStatus("Active");
+        user.setStatus(RecordStatus.ACTIVE);
         user.setPassword(hashed);
         user.setFullName(user.getFirstName() + " " + user.getLastName());
         user.setLanguagePreference("en");
         user.setTimezone("en/us");
-        user.setAccountVerificationStatus("Unverified");
+        user.setAccountVerificationStatus(User.VerificationStatus.PENDING);
 
         Role defaultRole = this.roleService.getRoleByName("User");
 
@@ -100,7 +101,7 @@ public class UserTableService {
         userRole.setUserId(userId);
         userRole.setCreateDate(now);
         userRole.setUpdateDate(now);
-        userRole.setStatus("Active");
+        userRole.setStatus(RecordStatus.ACTIVE);
 
         this.userRolesService.save(userRole);
 

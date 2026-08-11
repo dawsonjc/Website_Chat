@@ -28,7 +28,7 @@ public class Conversation {
 
     @Column(value = "status")
     @CassandraType(type = CassandraType.Name.TEXT)
-    private String status;
+    private RecordStatus status;
 
     @Column(value = "name")
     @CassandraType(type = CassandraType.Name.TEXT)
@@ -40,7 +40,7 @@ public class Conversation {
 
     public Conversation() {}
 
-    public Conversation(UUID conversationId, Instant createDate, Instant updateDate, String status, String name, Set<UUID> users) {
+    public Conversation(UUID conversationId, Instant createDate, Instant updateDate, RecordStatus status, String name, Set<UUID> users) {
         this.conversationId = conversationId;
         this.createDate = createDate;
         this.updateDate = updateDate;
@@ -73,11 +73,11 @@ public class Conversation {
         this.updateDate = updateDate;
     }
 
-    public String getStatus() {
+    public RecordStatus getStatus() {
         return this.status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RecordStatus status) {
         this.status = status;
     }
 
