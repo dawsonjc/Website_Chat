@@ -83,10 +83,12 @@ public class MessageView {
     public Message toMessage() {
         Message message = new Message(MessageType.GENERIC);
 
+        message.setStatus(this.status);
+        message.setCreateDate(this.createDate);
+        message.setUpdateDate(this.updateDate);
         message.setMessageId(this.messageId);
         message.setCreateDate(this.createDate);
         message.setUpdateDate(this.updateDate);
-        message.setStatus(this.status);
         message.setConversationId(this.conversationId);
         message.setFromUserId(this.fromUserId);
         message.setFromUsername(this.fromUsername);

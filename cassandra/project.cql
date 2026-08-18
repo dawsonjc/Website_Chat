@@ -150,18 +150,18 @@ CREATE TABLE IF NOT EXISTS  mykeyspacename.unread_events (
             'compaction_window_unit': 'DAYS'
             };
 
-CREATE INDEX ON mykeyspacename.events (is_read);
-CREATE INDEX ON mykeyspacename.events (event_type);
+CREATE INDEX IF NOT EXISTS ON mykeyspacename.events (is_read);
+CREATE INDEX IF NOT EXISTS ON mykeyspacename.events (event_type);
 
-CREATE INDEX ON mykeyspacename.conversations (users);
+CREATE INDEX IF NOT EXISTS ON mykeyspacename.conversations (users);
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS mykeyspacename.messages_by_conversation_id AS
     SELECT * FROM mykeyspacename.messages WHERE conversation_id IS NOT NULL AND create_date IS NOT NULL AND messageid IS NOT NULL
     PRIMARY KEY (conversation_id, create_date, messageid) WITH CLUSTERING ORDER BY (create_date DESC, messageid ASC);
 
-INSERT INTO mykeyspacename.conversations(conversationid, create_date, update_date, status, name) VALUES(uuid(), totimestamp(now()), totimestamp(now()), 'Active', 'Global Chat');
-INSERT INTO mykeyspacename.roles(roleid, create_date, update_date, status, role_name, description) VALUES (uuid(), totimestamp(now()), totimestamp(now()), 'Active', 'Admin', 'Admin');
-INSERT INTO mykeyspacename.roles(roleid, create_date, update_date, status, role_name, description) VALUES (uuid(), totimestamp(now()), totimestamp(now()), 'Active', 'Moderator', 'Moderator');
-INSERT INTO mykeyspacename.roles(roleid, create_date, update_date, status, role_name, description) VALUES (uuid(), totimestamp(now()), totimestamp(now()), 'Active', 'User', 'User');
+INSERT INTO mykeyspacename.conversations(conversationid, create_date, update_date, status, name) VALUES(00000000-0000-0000-0000-000000000001, totimestamp(now()), totimestamp(now()), 'Active', 'Global Chat');
+INSERT INTO mykeyspacename.roles(roleid, create_date, update_date, status, role_name, description) VALUES (00000000-0000-0000-0000-000000000101, totimestamp(now()), totimestamp(now()), 'Active', 'Admin', 'Admin');
+INSERT INTO mykeyspacename.roles(roleid, create_date, update_date, status, role_name, description) VALUES (00000000-0000-0000-0000-000000000102, totimestamp(now()), totimestamp(now()), 'Active', 'Moderator', 'Moderator');
+INSERT INTO mykeyspacename.roles(roleid, create_date, update_date, status, role_name, description) VALUES (00000000-0000-0000-0000-000000000103, totimestamp(now()), totimestamp(now()), 'Active', 'User', 'User');
 
-// INSERT INTO mykeyspacename.user_roles(create_date, update_date, status, userid, roleid, role_name) VALUES(totimestamp(now()), totimestamp(now()), 'Active', , ,'Admin');
+-- INSERT INTO mykeyspacename.user_role(create_date, update_date, status, userid, roleid, role_name) VALUES(totimestamp(now()), totimestamp(now()), 'Active', ..., ..., 'Admin');

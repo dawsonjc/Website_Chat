@@ -1,7 +1,10 @@
 services:
   cassandra:
-    image: cassandra:4.1
-    container_name: website-chat-cassandra
+    image: website-chat-cassandra:local
+    build:
+      context: ./cassandra
+      dockerfile: Dockerfile
+    restart: unless-stopped
     ports:
       - "9042:9042"
     environment:
@@ -11,35 +14,28 @@ services:
     volumes:
       - cassandra-data:/var/lib/cassandra
     healthcheck:
-      test: ["CMD-SHELL", "cqlsh -e 'DESCRIBE KEYSPACES' localhost 9042"]
-      interval: 15s
+      test: ["CMD-SHELL", "cqlsh localhost 9042 -e 'SELECT release_version FROM system.local' || exit 1"]
+      interval: 10s
       timeout: 10s
-      retries: 20
+      retries: 30
+      start_period: 30s
 
   cassandra-init:
-    image: cassandra:4.1
-    container_name: website-chat-cassandra-init
+    image: website-chat-cassandra:local
+    restart: "no"
     depends_on:
       cassandra:
         condition: service_healthy
     volumes:
-      - ./cassandra/project.cql:/project.cql
-    command: >
-      bash -c "
-      echo Waiting for Cassandra;
-      until cqlsh cassandra 9042 -e 'DESCRIBE KEYSPACES'; do
-        sleep 5;
-      done;
-      echo Running project.cql;
-      cqlsh cassandra 9042 -f /project.cql;
-      echo Cassandra initialization complete;
-      "
+      - ./cassandra/project.cql:/project.cql:ro
+    command: ["cqlsh", "cassandra", "9042", "-f", "/project.cql"]
 
-  frontend:
+  app:
+    image: website-chat-app:local
     build:
       context: .
-      dockerfile: frontend/Dockerfile
-    container_name: website-chat-frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
     depends_on:
       cassandra:
         condition: service_healthy
@@ -48,9 +44,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_PROFILES_ACTIVE: docker
-      CASSANDRA_CONTACT_POINTS: cassandra
-      CASSANDRA_PORT: "9042"
+      SPRING_CASSANDRA_CONTACT_POINTS: cassandra
+      SPRING_CASSANDRA_PORT: "9042"
+      SPRING_CASSANDRA_KEYSPACE_NAME: mykeyspacename
+      SPRING_CASSANDRA_LOCAL_DATACENTER: datacenter1
+      SPRING_CASSANDRA_SCHEMA_ACTION: NONE
 
 volumes:
   cassandra-data:

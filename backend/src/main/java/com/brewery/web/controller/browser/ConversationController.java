@@ -2,6 +2,7 @@ package com.brewery.web.controller.browser;
 
 import com.brewery.web.dto.ConversationDTO;
 import com.brewery.web.model.Conversation;
+import com.brewery.web.model.RecordStatus;
 import com.brewery.web.model.message.Message;
 import com.brewery.web.model.User;
 import com.brewery.web.services.ConversationService;
@@ -82,7 +83,7 @@ public class ConversationController {
         conversation.setConversationId(UUID.randomUUID());
         conversation.setCreateDate(java.time.Instant.now());
         conversation.setUpdateDate(java.time.Instant.now());
-        conversation.setStatus("Active");
+        conversation.setStatus(RecordStatus.ACTIVE);
 
         String name = currentUser.getUsername() + "|" + potentialFriend.getUsername();
 

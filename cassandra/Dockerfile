@@ -1,12 +1,7 @@
-FROM cassandra:3.11.16
+FROM cassandra:4.1.7
+
+# The application reads messages through a Cassandra materialized view.
+RUN sed -ri 's/^materialized_views_enabled:.*/materialized_views_enabled: true/' /etc/cassandra/cassandra.yaml
 
 EXPOSE 9042
-
-COPY project.cql /docker-entrypoint-initdb.d/
-COPY init-db.sh  /docker-entrypoint-initdb.d/
-
-RUN apt-get -y update && apt-get install -y && \
-    apt-get install -y vim
-
-RUN chmod +x /docker-entrypoint-initdb.d/init-db.sh
 

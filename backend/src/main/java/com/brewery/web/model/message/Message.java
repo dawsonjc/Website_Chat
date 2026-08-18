@@ -58,6 +58,7 @@ public class Message {
      * @deprecated
      * Please use {@link #Message(MessageType)}
      */
+    @Deprecated
     public Message() {}
 
     public Message(MessageType messageType) {

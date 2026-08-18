@@ -1,0 +1,12 @@
+.git
+.gradle
+.idea
+.kotlin
+.metadata
+**/build
+**/node_modules
+**/.gradle
+**/.kobweb/server
+**/.kobweb/site
+*.iml
+.env

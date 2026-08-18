@@ -1,5 +1,6 @@
 package com.brewery.web.services;
 
+import com.brewery.web.model.RecordStatus;
 import com.brewery.web.model.message.Message;
 import com.brewery.web.model.User;
 import com.brewery.web.model.message.MessageType;
@@ -68,7 +69,7 @@ public class MessagesService {
     }
 
     public void deleteMessage(Message message) {
-        message.setStatus("Disabled");
+        message.setStatus(RecordStatus.DISABLED);
 
         this.repo.save(message);
     }
