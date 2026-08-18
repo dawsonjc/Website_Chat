@@ -5,7 +5,6 @@ import com.brewery.web.services.UserTableService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,8 +20,11 @@ import java.util.List;
 @RequestMapping(value = { "/account" })
 public class Account {
 
-    @Autowired
-    private UserTableService accountService;
+    private final UserTableService accountService;
+
+    public Account(UserTableService accountService) {
+        this.accountService = accountService;
+    }
 
     @RequestMapping(value = { "" })
     public String accountView() {

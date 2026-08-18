@@ -1,6 +1,6 @@
 package com.brewery.web.dto.event;
 
-import com.brewery.web.model.RecordStatus;
+import com.brewery.web.model.record.RecordStatus;
 import com.brewery.web.model.event.Event;
 import com.brewery.web.model.event.EventType;
 import com.brewery.web.model.event.EventsByType;

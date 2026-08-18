@@ -2,7 +2,7 @@ package com.brewery.web.controller.browser;
 
 import com.brewery.web.dto.ConversationDTO;
 import com.brewery.web.model.Conversation;
-import com.brewery.web.model.RecordStatus;
+import com.brewery.web.model.record.RecordStatus;
 import com.brewery.web.model.message.Message;
 import com.brewery.web.model.User;
 import com.brewery.web.services.ConversationService;

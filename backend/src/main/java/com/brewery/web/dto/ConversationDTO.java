@@ -1,7 +1,7 @@
 package com.brewery.web.dto;
 
 import com.brewery.web.model.Conversation;
-import com.brewery.web.model.RecordStatus;
+import com.brewery.web.model.record.RecordStatus;
 
 import java.time.Instant;
 import java.util.Set;

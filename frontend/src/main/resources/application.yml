@@ -1,11 +1,11 @@
 spring:
   cassandra:
-    port: 9042
-    contact-points: mycassandra
-    keyspace-name: mykeyspacename
-    schema-action: CREATE_IF_NOT_EXISTS
+    contact-points: ${CASSANDRA_CONTACT_POINTS:localhost}
+    port: ${CASSANDRA_PORT:9042}
+    keyspace-name: ${CASSANDRA_KEYSPACE_NAME:mykeyspacename}
+    local-datacenter: ${CASSANDRA_LOCAL_DATACENTER:datacenter1}
+    schema-action: ${CASSANDRA_SCHEMA_ACTION:NONE}
     entity-base-package: com.brewery.web.model
-    local-datacenter: datacenter1
   mvc:
     view:
       prefix: "/WEB-INF/jsp/"

@@ -1,7 +1,6 @@
 package com.brewery.web.model.message;
 
-import com.brewery.web.model.RecordStatus;
-import com.brewery.web.model.message.Message;
+import com.brewery.web.model.record.RecordStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
@@ -83,12 +82,10 @@ public class MessageView {
     public Message toMessage() {
         Message message = new Message(MessageType.GENERIC);
 
-        message.setStatus(this.status);
-        message.setCreateDate(this.createDate);
-        message.setUpdateDate(this.updateDate);
         message.setMessageId(this.messageId);
         message.setCreateDate(this.createDate);
         message.setUpdateDate(this.updateDate);
+        message.setStatus(this.status);
         message.setConversationId(this.conversationId);
         message.setFromUserId(this.fromUserId);
         message.setFromUsername(this.fromUsername);

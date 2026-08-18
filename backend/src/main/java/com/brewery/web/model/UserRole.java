@@ -1,5 +1,6 @@
 package com.brewery.web.model;
 
+import com.brewery.web.model.record.RecordStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
@@ -8,7 +9,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import java.time.Instant;
 import java.util.UUID;
 
-@Table(value = "user_roles")
+@Table(value = "user_role")
 public class UserRole {
 
     @Column(value = "create_date")

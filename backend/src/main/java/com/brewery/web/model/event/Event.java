@@ -1,6 +1,6 @@
 package com.brewery.web.model.event;
 
-import com.brewery.web.model.RecordStatus;
+import com.brewery.web.model.record.RecordStatus;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;

@@ -1,6 +1,6 @@
 package com.brewery.web.model.event;
 
-import com.brewery.web.model.RecordStatus;
+import com.brewery.web.model.record.RecordStatus;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;

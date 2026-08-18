@@ -1,7 +1,7 @@
 package com.brewery.web.model;
 
 import com.brewery.web.dto.ConversationDTO;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.brewery.web.model.record.RecordStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
