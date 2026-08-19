@@ -1,18 +1,53 @@
-# Website Chat
+# JVM CRM Platform
 
-Website Chat is a JVM-first, full-stack communication application built around real-time conversations, account management, administrative moderation, and a Cassandra-backed data model. The repository also contains the beginnings of a CRM data layer for organizations, contacts, leads, deals, tasks, activities, and teams.
+> Working repository name: `Website_Chat`
 
-The current product is best understood as an actively developed chat platform and JVM web-technology laboratory rather than a production-ready service. Its primary working path is the Spring Boot/JSP/Scala.js application. A separate Kotlin Multiplatform/Kobweb authentication UI is experimental and is not part of the main Docker Compose runtime.
+This project is evolving from a real-time chat application into a JVM-first customer relationship management (CRM) platform. The existing account, role, conversation, live-message, moderation, and event foundations are intended to become the collaboration layer around organizations, contacts, leads, deals, tasks, notes, activities, and teams.
+
+The target product is a multi-workspace CRM in which a team can manage its customer lifecycle, collaborate around customer records, follow a sales pipeline, schedule work, receive actionable notifications, and retain a unified activity history. The current product is not production-ready: chat and basic account workflows are partially functional, the CRM tables are schema-only, and several security and application workflows remain to be built.
+
+The primary runnable path is the Spring Boot/JSP/Scala.js application. A separate Kotlin Multiplatform/Kobweb authentication UI is experimental and is not part of the main Docker Compose runtime.
+
+## Product vision
+
+The intended end state is one cohesive CRM with five connected capabilities:
+
+1. **Customer records** — organizations and contacts with ownership, lifecycle state, communication preferences, relationships, notes, and custom fields.
+2. **Sales execution** — lead intake and qualification, configurable pipelines, opportunities, stage movement, forecasts, win/loss outcomes, and lead conversion.
+3. **Work management** — assignable tasks, reminders, due-date views, team ownership, and work linked to any CRM record.
+4. **Communication and collaboration** — record-linked conversations, real-time internal chat, mentions, customer interaction history, and administrative moderation.
+5. **Events and notifications** — durable domain events that drive an inbox, unread counts, reminders, assignments, mentions, deal changes, audit history, and eventually outbound delivery such as email.
+
+The CRM should remain query-first and operationally focused. Cassandra is suitable for known, high-volume access patterns and timelines; fuzzy search, arbitrary reporting, and large analytical aggregations should eventually use dedicated search or analytics infrastructure rather than broad Cassandra scans.
 
 ## Project goals
 
-- Provide authenticated, browser-based real-time chat.
-- Support a shared Global Chat and user conversation channels.
-- Persist users, roles, conversations, messages, events, and CRM records in Cassandra.
-- Provide administrator-controlled account verification and message moderation.
+- Deliver a usable multi-workspace CRM for teams managing customers and revenue workflows.
+- Provide authenticated, browser-based real-time collaboration around CRM records.
+- Support a shared Global Chat, direct/team conversations, and eventually record-linked channels.
+- Persist users, roles, CRM records, conversations, messages, events, and notifications in Cassandra.
+- Provide workspace, team, role, account-verification, and moderation controls.
 - Keep application implementation within a JVM-oriented technology stack.
 - Explore JVM languages across server and browser targets without adopting a conventional JavaScript application framework.
 - Support reproducible local startup through Gradle and Docker Compose.
+- Maintain explicit, testable projections for every supported Cassandra query pattern.
+
+## Scope and current maturity
+
+| Capability | Status | Current reality | Intended destination |
+|---|---|---|---|
+| Accounts and sessions | Partial | Registration, bcrypt login, logout, roles, and session authentication exist | Spring Security, robust validation, recovery, verification, workspace membership, and secure session/token lifecycle |
+| Administration | Partial | Admin page can list and verify pending users; route filtering exists | Workspace administration, users, teams, permissions, audit log, settings, and policy enforcement |
+| Chat | Partial | Global Chat, message history, WebSockets, and soft deletion exist | Direct/team/record conversations, mentions, presence, attachments, search, and reliable authorization |
+| Events and notifications | Foundation only | Cassandra models and three event tables exist | Domain-event production, notification service, inbox UI, unread counts, preferences, expiry, and delivery workers |
+| Organizations | Schema only | Canonical and owner/name/domain projections exist | CRUD, ownership, hierarchy, contacts, deals, activity timeline, duplicate detection, and UI |
+| Contacts | Schema only | Canonical and organization/owner/email projections exist | CRUD, organization linkage, consent/preferences, lifecycle, communication history, deduplication, and UI |
+| Leads | Schema only | Canonical, owner/status, and email projections exist | Capture, qualification, scoring, assignment, conversion, source attribution, and UI |
+| Pipelines and deals | Schema only | Pipeline, stages, opportunity records, and primary board/list projections exist | Configurable boards, stage transitions, forecasting, close outcomes, automation, and UI |
+| Tasks | Schema only | Canonical, owner/month, and related-record projections exist | Assignment, reminders, recurring work, completion events, calendars, and UI |
+| Notes and activities | Schema only | Canonical records and timeline projections exist | Unified record timeline for notes, calls, emails, meetings, messages, and system changes |
+| Teams | Schema only | Team and membership projections exist | Workspace-scoped teams, managers, membership lifecycle, permissions, routing, and reporting |
+| Tests and delivery | Not implemented | Builds are manually verified | Automated tests, CI, versioned migrations, observability, backups, and deployment environments |
 
 ## JVM-first restriction
 
@@ -305,6 +340,55 @@ Record statuses are stored as display values such as `Active` and `Disabled`. Re
 
 `workspace_id` is the CRM tenant boundary. Cassandra projections must be maintained explicitly: when a field used in a projection primary key changes, application code must delete the old projection row and insert the replacement. See `cassandra/CRM_SCHEMA.md` and `cassandra/crm-query-examples.cql` for model rules and example queries.
 
+#### CRM table catalog and intended use
+
+These tables describe planned access patterns; there are not yet Java entities, repositories, services, controllers, or screens for them.
+
+| Domain | Canonical source | Read projections | Intended application behavior |
+|---|---|---|---|
+| Organizations | `crm_organizations_by_id` | `crm_organizations_by_owner`, `crm_organization_ids_by_name`, `crm_organization_ids_by_domain` | Account/company profiles, ownership queues, parent organizations, name/domain lookup, duplicate detection, and related contacts/deals |
+| Contacts | `crm_contacts_by_id` | `crm_contacts_by_organization`, `crm_contacts_by_owner`, `crm_contact_ids_by_email` | People associated with organizations, ownership, lifecycle stage, consent flags, contact lookup, and customer timelines |
+| Leads | `crm_leads_by_id` | `crm_leads_by_owner_status`, `crm_lead_ids_by_email` | Unqualified prospects, assignment, scoring, source tracking, qualification, and conversion into organization/contact/deal records |
+| Pipelines | `crm_pipelines_by_id` | `crm_pipelines_by_workspace`, `crm_pipeline_stages_by_pipeline` | Workspace-configurable sales processes with ordered stages, probabilities, and won/lost semantics |
+| Deals | `crm_deals_by_id` | `crm_deals_by_pipeline_stage`, `crm_deals_by_owner_status`, `crm_deals_by_organization`, `crm_deals_by_contact` | Opportunities, kanban board queries, owner forecasts, expected close dates, relationship views, and win/loss tracking |
+| Tasks | `crm_tasks_by_id` | `crm_tasks_by_owner_due_month`, `crm_tasks_by_entity` | Follow-ups and internal work, owner queues, due-date views, reminders, priorities, completion, and links to CRM records |
+| Notes | `crm_notes_by_id` | `crm_notes_by_entity` | User-authored, optionally pinned context attached to organizations, contacts, leads, deals, or other supported entities |
+| Activities | `crm_activities_by_id` | `crm_activities_by_entity`, `crm_activities_by_owner_day` | Immutable-style timeline entries for calls, emails, meetings, messages, state changes, and other customer interactions |
+| Teams | `crm_teams_by_id` | `crm_teams_by_workspace`, `crm_team_members_by_team`, `crm_teams_by_user` | Workspace organization, managers, memberships, team-local roles, assignment/routing, and team-filtered views |
+
+`*_by_id` rows are canonical application records, not relational parents enforced by Cassandra. Projection consistency is an application responsibility. A write service should update the canonical row and every affected projection together as a deliberate workflow, ideally with idempotency and retry handling. Cassandra batches are appropriate only when the participating writes share a partition and atomicity is genuinely required; they should not be treated as relational transactions.
+
+#### Domain relationships
+
+- A workspace is the tenant boundary for all CRM records. A first-class workspace/member model still needs to be added; `workspace_id` currently exists only as a schema key.
+- A user may own organizations, contacts, leads, deals, tasks, and activities.
+- An organization may contain contacts and may have multiple deals, notes, tasks, activities, and conversations.
+- A lead is pre-conversion. Conversion should create or link an organization, contact, and optionally a deal, then record their IDs and emit a conversion event.
+- A deal belongs to a pipeline stage and may reference an organization and primary contact.
+- Tasks, notes, activities, and future conversations use an entity type plus entity ID to attach work and history to different CRM record types.
+- Teams group users inside a workspace. Team roles must remain distinct from global application roles such as Admin, Moderator, and User.
+
+### Event and notification system direction
+
+The existing event schema is a starting point, not a completed feature:
+
+| Table | Intended responsibility |
+|---|---|
+| `events` | Durable per-user event history ordered newest first |
+| `events_by_type` | Per-user filtered history, such as assignments, mentions, reminders, or deal changes |
+| `unread_events` | Sparse projection containing only notifications the user has not read |
+
+A complete implementation should add:
+
+1. A domain-event contract containing event ID, type, actor, recipient, workspace, subject entity, timestamps, human-readable content, action URL, and structured metadata.
+2. Producers in CRM services for assignments, mentions, task reminders, overdue work, stage changes, lead conversion, account verification, and collaboration activity.
+3. A notification service that writes the durable event row and its type/unread projections idempotently.
+4. APIs for paginated inbox reads, type filters, unread counts, mark-one-read, mark-all-read, archive, and notification preferences.
+5. A browser notification center with real-time delivery where appropriate; WebSocket delivery should complement Cassandra persistence rather than replace it.
+6. A scheduler or worker for due reminders, expiry, retries, and optional outbound channels such as email.
+7. Audit events separated from user-facing notifications when retention or compliance requirements differ.
+8. Tests proving duplicate delivery does not create duplicate events and read/archive operations keep projections consistent.
+
 ### Inspecting Cassandra
 
 Open an interactive CQL shell:
@@ -458,16 +542,84 @@ Before exposing this application publicly, address at least the following:
 
 The supplied Compose topology is intended for local development. It exposes Cassandra directly on the host, uses a single Cassandra node, has no database authentication, and contains no production secret management.
 
-## Suggested roadmap
+## Delivery roadmap
 
-1. Add automated tests and CI for `:frontend:bootWar`.
-2. Adopt Spring Security for HTTP sessions, roles, CSRF, and WebSocket identity.
-3. Complete direct-conversation persistence and account error handling.
-4. Implement email-backed verification and password recovery.
-5. Decide whether JSP/Scala.js or Kobweb will be the long-term frontend architecture.
-6. Introduce versioned Cassandra migrations.
-7. Build services and UI for the existing CRM schema.
-8. Add observability and production deployment profiles.
+The ordering below treats security, tenant boundaries, and consistency as prerequisites rather than cleanup work after the CRM UI is built.
+
+### Phase 0 — stabilize the foundation
+
+- Add unit tests for services, converters, validation, and authorization decisions.
+- Add Cassandra integration tests using disposable infrastructure and test the actual CQL projections.
+- Add HTTP and WebSocket integration tests and a CI build for `:frontend:bootWar`.
+- Adopt Spring Security for sessions, role checks, CSRF, secure cookie settings, and WebSocket identity.
+- Replace client-supplied WebSocket user identity with authenticated server-side identity.
+- Complete registration conflict handling, direct-conversation persistence, account pages, verification delivery, and password recovery.
+- Add structured error responses, request validation, centralized exception handling, and production-safe error configuration.
+- Choose the long-term frontend direction: JSP plus Scala.js, or Kotlin/Kobweb. Avoid indefinitely maintaining two competing UI stacks.
+
+### Phase 1 — workspace and CRM core
+
+- Add canonical workspace and workspace-membership tables, services, roles, and invitation flow.
+- Define permission rules for workspace admins, managers, record owners, team members, and ordinary members.
+- Implement organization and contact entities, repositories, projection writers, services, APIs, and screens.
+- Add normalization and duplicate-detection policies for names, domains, emails, and phone numbers.
+- Implement notes, tasks, and a unified activity timeline attached to organizations and contacts.
+- Record create/update/assignment actions as activities and domain events.
+
+### Phase 2 — leads and sales pipeline
+
+- Implement lead capture, assignment, qualification, scoring, status transitions, and source attribution.
+- Implement transactional-in-intent lead conversion with idempotent creation/linking of organization, contact, and deal records.
+- Build pipeline and ordered-stage administration.
+- Build deal CRUD, stage movement, owner views, organization/contact views, and pipeline board.
+- Calculate expected revenue consistently and retain stage-change and close history as activities.
+- Add won/lost workflows, loss reasons, forecasts, and safe projection-key migration when stage, owner, or status changes.
+
+### Phase 3 — events, notifications, and collaboration
+
+- Implement the event producer/consumer model described above.
+- Add notification inbox, unread badge, filtering, read/archive operations, preferences, and task reminders.
+- Link conversations to CRM entities and add mentions, assignments, and team channels.
+- Add reliable real-time fan-out while preserving Cassandra as the source of notification history.
+- Evaluate email/calendar integrations behind JVM service interfaces without making external systems authoritative for CRM data.
+
+### Phase 4 — production operations
+
+- Replace bootstrap-only schema evolution with versioned, forward-only CQL migrations.
+- Add health/readiness endpoints, metrics, tracing, structured logs, audit logs, and alerting.
+- Configure Cassandra authentication, authorization, TLS, backups, repair operations, capacity planning, and multi-node replication.
+- Add rate limiting, secret management, data-retention controls, export/deletion workflows, and privacy/compliance review.
+- Add search infrastructure for fuzzy customer lookup and analytics infrastructure for reporting and dashboards.
+- Establish staged environments, deployment automation, rollback/runbook documentation, and disaster-recovery tests.
+
+## Definition of an initial CRM release
+
+An initial usable release should not be considered complete until it supports all of the following:
+
+- Workspace creation and membership with enforced tenant isolation.
+- Secure authentication, recovery, verification, logout, and role-based authorization.
+- Organization and contact CRUD with ownership, search/lookup, notes, tasks, and activity history.
+- Lead qualification and conversion.
+- Configurable pipelines and usable deal stage management.
+- Persistent notifications for assignments, mentions, reminders, and important record changes.
+- Reliable projection maintenance and migrations across upgrades without resetting retained data.
+- Automated tests for tenant isolation, authorization, projection consistency, and critical user journeys.
+- Production-safe configuration, monitoring, backup, and recovery procedures.
+
+## Terminology
+
+| Term | Meaning in this project |
+|---|---|
+| Workspace | Tenant boundary containing CRM data, users, teams, configuration, and permissions |
+| Organization | A company, account, nonprofit, household, or other customer organization |
+| Contact | A person associated with an organization or managed independently |
+| Lead | An unqualified prospect that may later become a contact, organization, and deal |
+| Deal / opportunity | A revenue or outcome opportunity moving through a pipeline |
+| Pipeline stage | An ordered step with probability and open/won/lost meaning |
+| Activity | Timeline record of an interaction or meaningful system/user action |
+| Event | Durable machine- and user-consumable occurrence that may create a notification |
+| Projection | A denormalized Cassandra table shaped for one specific query pattern |
+| Canonical row | The complete `*_by_id` representation used as the primary application record |
 
 ## License
 
