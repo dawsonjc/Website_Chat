@@ -27,7 +27,6 @@ object HelpFunctions {
                 indexedMap += (name -> (indexedMap(name).asInstanceOf[Seq[String]].appended(value)))
             }
         }
-        val c: Char = '"';
         
         return indexedMap;
     }
@@ -50,13 +49,13 @@ object HelpFunctions {
             minute = "2-digit",
             hour12 = true
         ).asInstanceOf[DateTimeFormatOptions]);
-        val dateFormatted = dt.format(date);
+        val dateFormatted: String = dt.format(date);
         
         return dateFormatted;
     }
     
     def parseToUTCDateTime(date: Date): String = {
-        val options = js.Dynamic.literal(
+        val options: js.Dynamic = js.Dynamic.literal(
             timeZone = "UTC",
             year = "numeric",
             month = "2-digit",
@@ -75,8 +74,8 @@ object HelpFunctions {
     
     def setCookie(name: String, obj: js.Any, days: Option[Int]): Unit = {
         val jsonString = JSON.stringify(obj)
-        val encodedValue = URIUtils.encodeURIComponent(jsonString)
-        val expires = days match {
+        val encodedValue: String = URIUtils.encodeURIComponent(jsonString)
+        val expires: String = days match {
             case Some(d) =>
                 val date = new Date()
                 date.setTime(date.getTime() + (d * 24 * 60 * 60 * 1000))

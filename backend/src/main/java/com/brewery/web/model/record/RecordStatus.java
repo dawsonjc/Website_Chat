@@ -19,7 +19,6 @@ public enum RecordStatus {
         return this.status;
     }
 
-
     public static RecordStatus fromString(String value) {
         for(RecordStatus rs : RecordStatus.values()) {
             if(rs.status.equalsIgnoreCase(value)) {

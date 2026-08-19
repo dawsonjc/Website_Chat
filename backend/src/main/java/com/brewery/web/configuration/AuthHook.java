@@ -47,7 +47,7 @@ public class AuthHook implements Filter {
                 return;
             }
 
-            if(servletPath.startsWith("/message") && loggedIn.getAccountVerificationStatus().equals("Unverified")) {
+            if(servletPath.startsWith("/message") && loggedIn.getAccountVerificationStatus().equals(User.VerificationStatus.PENDING)) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
                 return;
             }

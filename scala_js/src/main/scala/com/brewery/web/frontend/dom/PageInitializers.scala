@@ -17,7 +17,7 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 
 object PageInitializers {
     
-    def initialize(): Unit = {
+    def initializeHeader(): Unit = {
         // header
         jQ("#logout").on(EventName.click, (element: Element, jQueryEvent: JQueryEvent) => {
             jQueryEvent.preventDefault();

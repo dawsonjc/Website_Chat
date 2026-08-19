@@ -11,7 +11,7 @@ object Main {
     def main(args: Array[String]): Unit = {
         val pathname: String = org.scalajs.dom.window.location.pathname;
         io.udash.wrappers.jquery.jQ(() => {
-            PageInitializers.initialize();
+            PageInitializers.initializeHeader();
             
             methods.get(pathname) match {
                 case Some(fn) => {
