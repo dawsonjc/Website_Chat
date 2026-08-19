@@ -32,10 +32,13 @@ object HelpFunctions {
     }
     
     def cleanseString(string: String): String = {
-        var retString = string.replaceAll("<", "&lt;");
+        var retString: String = string.replaceAll("<", "&lt;");
         retString = retString.replaceAll(">", "&gt;");
         retString = retString.replaceAll("\"", "&#34;");
         retString = retString.replaceAll("'", "&#39;");
+        retString = retString.replaceAll("/", "&#x2F;");
+        retString = retString.replaceAll("\\\\", "&#x5C;");
+        retString = retString.replaceAll("`", "&#96;");
         
         return retString;
     }

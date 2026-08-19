@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS mykeyspacename.conversations (
     PRIMARY KEY ( conversationid )
 );
 
-CREATE TABLE  IF NOT EXISTS mykeyspacename.events (
+CREATE TABLE  IF NOT EXISTS mykeyspacename.event (
     user_id uuid,
     event_id timeuuid,
     create_date TIMESTAMP,

@@ -1083,6 +1083,9 @@ $c_Lcom_brewery_web_frontend_HelpFunctions$.prototype.cleanseString__T__T = (fun
   retString = $f_T__replaceAll__T__T__T($n(retString), ">", "&gt;");
   retString = $f_T__replaceAll__T__T__T($n(retString), "\"", "&#34;");
   retString = $f_T__replaceAll__T__T__T($n(retString), "'", "&#39;");
+  retString = $f_T__replaceAll__T__T__T($n(retString), "/", "&#x2F;");
+  retString = $f_T__replaceAll__T__T__T($n(retString), "\\\\", "&#x5C;");
+  retString = $f_T__replaceAll__T__T__T($n(retString), "`", "&#96;");
   return retString;
 });
 $c_Lcom_brewery_web_frontend_HelpFunctions$.prototype.formatDate__sjs_js_Date__T = (function(date) {
@@ -1171,6 +1174,7 @@ function $h_Lcom_brewery_web_frontend_Main$() {
 $h_Lcom_brewery_web_frontend_Main$.prototype = $c_Lcom_brewery_web_frontend_Main$.prototype;
 $c_Lcom_brewery_web_frontend_Main$.prototype.main__AT__V = (function(args) {
   var pathname = $as_T(window.location.pathname);
+  window.console.log($as_T(DOMPurify.sanitize("<img src=x onerror=alert(\"XSS\")><b>Valid Text</b>")));
   $($m_sjs_js_Any$().fromFunction0__F0__sjs_js_Function0(new $c_sr_AbstractFunction0_$$Lambda$a02b774b97db8234e08c6a02dd06557c99779855((() => {
     $m_Lcom_brewery_web_frontend_dom_PageInitializers$().initializeHeader__V();
     matchResult1: {
@@ -1239,10 +1243,34 @@ function $h_Lcom_brewery_web_frontend_account_Login$() {
 }
 $h_Lcom_brewery_web_frontend_account_Login$.prototype = $c_Lcom_brewery_web_frontend_account_Login$.prototype;
 $c_Lcom_brewery_web_frontend_account_Login$.prototype.loginValidation__Lorg_scalajs_dom_HTMLFormElement__V = (function(form) {
-  var formData = $m_Lcom_brewery_web_frontend_HelpFunctions$().getFormData__Lio_udash_wrappers_jquery_JQuery__sci_Map($(form));
+  var \u03b41$ = $("#email-error");
+  \u03b41$.remove();
+  var \u03b42$ = $("#password-error");
+  \u03b42$.remove();
+  var loginForm = $(form);
+  var emailElement = loginForm.find("#email");
+  loginForm.find("#password");
+  var formData = $m_Lcom_brewery_web_frontend_HelpFunctions$().getFormData__Lio_udash_wrappers_jquery_JQuery__sci_Map(loginForm);
+  var EmailPattern = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", $m_sci_Nil$());
+  var email = $dp_toString__T($n($n(formData).apply__O__O("email")));
+  if ($n(EmailPattern.findFirstIn__jl_CharSequence__s_Option(email)).isEmpty__Z()) {
+    var element = $("<div>");
+    element.attr("id", "email-error");
+    element.addClass("mb-2 rounded-md border border-red-300 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 shadow-sm");
+    element.text("Please enter a valid email address");
+    emailElement.removeClass("border-gray-300 focus:ring-indigo-500 focus:border-indigo-500").addClass("border-red-500 text-red-900 placeholder-red-300 ring-1 ring-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.45)]");
+    emailElement.before(element);
+    return (void 0);
+  } else {
+    emailElement.removeClass("border-red-500 text-red-900 placeholder-red-300 ring-1 ring-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.45)]").addClass("border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500");
+  }
+  var this$3 = $n($dp_toString__T($n($n(formData).apply__O__O("password"))));
+  if ((this$3.length > 8)) {
+    return (void 0);
+  }
   var formUser = new ($a_Lcom_brewery_web_frontend_user_FormUser())();
   formUser.username = $m_Lcom_brewery_web_frontend_HelpFunctions$().cleanseString__T__T($dp_toString__T($n($n(formData).apply__O__O("email"))));
-  formUser.password = $m_Lcom_brewery_web_frontend_HelpFunctions$().cleanseString__T__T($dp_toString__T($n($n(formData).apply__O__O("password"))));
+  formUser.password = $dp_toString__T($n($n(formData).apply__O__O("password")));
   var $x_7 = $;
   var $x_6 = $m_sr_ScalaRunTime$();
   var $x_5 = new $c_T2("url", "/account/login");
@@ -7881,6 +7909,36 @@ $c_s_util_hashing_MurmurHash3$accum$1.prototype.apply__O__O__O = (function(v1, v
 var $d_s_util_hashing_MurmurHash3$accum$1 = new $TypeData().initClass($c_s_util_hashing_MurmurHash3$accum$1, "scala.util.hashing.MurmurHash3$accum$1", ({
   s_util_hashing_MurmurHash3$accum$1: 1,
   F2: 1
+}));
+function $ct_s_util_matching_Regex__ju_regex_Pattern__sci_Seq__($thiz, pattern, groupNames) {
+  $thiz.s_util_matching_Regex__f_pattern = pattern;
+  return $thiz;
+}
+function $ct_s_util_matching_Regex__T__sci_Seq__($thiz, regex, groupNames) {
+  $ct_s_util_matching_Regex__ju_regex_Pattern__sci_Seq__($thiz, $m_ju_regex_PatternCompiler$().compile__T__I__ju_regex_Pattern(regex, 0), groupNames);
+  return $thiz;
+}
+/** @constructor */
+function $c_s_util_matching_Regex() {
+  this.s_util_matching_Regex__f_pattern = null;
+}
+$c_s_util_matching_Regex.prototype = new $h_O();
+$c_s_util_matching_Regex.prototype.constructor = $c_s_util_matching_Regex;
+/** @constructor */
+function $h_s_util_matching_Regex() {
+}
+$h_s_util_matching_Regex.prototype = $c_s_util_matching_Regex.prototype;
+$c_s_util_matching_Regex.prototype.findFirstIn__jl_CharSequence__s_Option = (function(source) {
+  var this$1 = $n(this.s_util_matching_Regex__f_pattern);
+  var m = new $c_ju_regex_Matcher(this$1, $dp_toString__T($n(source)));
+  return (m.find__Z() ? new $c_s_Some(m.group__T()) : $m_s_None$());
+});
+$c_s_util_matching_Regex.prototype.toString__T = (function() {
+  return $n(this.s_util_matching_Regex__f_pattern).ju_regex_Pattern__f__pattern;
+});
+var $d_s_util_matching_Regex = new $TypeData().initClass($c_s_util_matching_Regex, "scala.util.matching.Regex", ({
+  s_util_matching_Regex: 1,
+  Ljava_io_Serializable: 1
 }));
 function $s_Lcom_brewery_web_frontend_message_Message__toJQueryElement__Lcom_brewery_web_frontend_message_Message__Lio_udash_wrappers_jquery_JQuery(this$1) {
   var $x_1 = $;
