@@ -40,17 +40,10 @@ public class MessageSocket {
         if(!paramMap.containsKey("userId")) {
             return;
         }
-        System.err.println(config.getEncoders());
-
-        System.err.println(config.getDecoders());
-
-        printParams(config);
 
         // POTENTIAL SECURITY VULNERABILITY?
         // requestor would have to get *both* a correct user id and somehow guess that the conversationId
         // also exists in said user? Think about fixing? Auth Token?
-
-
         UUID conversationUUID = UUID.fromString(paramMap.get("conversationId").getFirst());
         String conversationId = conversationUUID.toString();
         String userId = paramMap.get("userId").getFirst();
@@ -70,7 +63,6 @@ public class MessageSocket {
 
     @OnClose
     public void onClose(Session session) {
-        printParams(session);
         String conversationId = session.getRequestParameterMap().get("conversationId").getFirst();
 
         Set<Session> sessions = conversationSessions.get(conversationId);

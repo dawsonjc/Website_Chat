@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping(value = { "/account" })
 public class ForgotPassword {
+    // TODO: Emails
+
 
     @GetMapping(value = { "/forgot-password" })
     public String forgetPasswordView(HttpServletRequest request) {

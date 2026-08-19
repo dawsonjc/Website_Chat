@@ -11,6 +11,8 @@ object Main {
     def main(args: Array[String]): Unit = {
         val pathname: String = org.scalajs.dom.window.location.pathname;
         io.udash.wrappers.jquery.jQ(() => {
+            PageInitializers.initialize();
+            
             methods.get(pathname) match {
                 case Some(fn) => {
                     fn();
@@ -18,8 +20,6 @@ object Main {
                 }
                 case None => org.scalajs.dom.window.console.log("Route not found")
             }
-            
-            
         });
     }
 }

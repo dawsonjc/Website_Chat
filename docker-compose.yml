@@ -27,8 +27,11 @@ services:
       cassandra:
         condition: service_healthy
     volumes:
-      - ./cassandra/project.cql:/project.cql:ro
-    command: ["cqlsh", "cassandra", "9042", "-f", "/project.cql"]
+      - ./cassandra:/schema:ro
+    command:
+      - /bin/sh
+      - -c
+      - cqlsh cassandra 9042 -f /schema/project.cql && cqlsh cassandra 9042 -f /schema/crm-schema.cql
 
   app:
     image: website-chat-app:local

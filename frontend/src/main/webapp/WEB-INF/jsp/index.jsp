@@ -1,110 +1,38 @@
-<%@ page import="com.brewery.web.dto.ConversationDTO" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.UUID" %>
-<%@ page import="com.brewery.web.model.message.Message" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="java.time.Instant" %>
+<%! private final String title = "Dashboard"; %>
+<%@ include file="header.jsp" %>
 
-<%! private final String title = "Chat"; %>
-<%@ include file="header.jsp"%>
-
-<main class="bg-gray-100 flex h-lvh overflow-y-auto overflow-x-clip">
-    <!-- Sidebar -->
-    <div class="bg-jakarta text-white w-1/6">
-        <h1 class="text-2xl font-semibold p-4">Channels</h1>
-        <ul class="overflow-y-auto">
-            <!-- List of Channels -->
-<%
-            ArrayList<ConversationDTO> channels = (ArrayList<ConversationDTO>) request.getAttribute("Channels");
-
-            if(channels != null) {
-                for(ConversationDTO channel : channels) {
-                    UUID conversationId = channel.conversationId();
-                    
-                    String name = channel.name();
-                    String[] names = name.split("\\|");
-                    if(names.length == 2) {
-                        String newName = "";
-                        for(String n : names) {
-                            if(!n.equals(user.getUsername())) {
-                                newName = n;   
-                            }
-                        }
-                        name = newName;
-                    } else if(!name.contains("|") && names.length > 2) {
-                    } else {
-                        name = name.replaceAll("\\|", ",");
-                    }
-
-                    String channelLink = request.getContextPath() + "/conversations?conversationId=" + conversationId;
-%>
-                        <li class="mb-2">
-                            <a href="<%= channelLink %>" class="hover:text-blue-300 px-4 py-2 block"><%= name %></a>
-                        </li>
-<%
-                }
-            }
-%>
-        </ul>
+<aside class="fixed bottom-0 left-0 top-10 z-40 w-16 overflow-y-auto bg-[#1d2028] text-[#959aa5] sm:w-40" aria-label="Admin navigation">
+    <div class="border-b border-[#292d35] bg-[#171a21] px-1.5 py-3 text-center sm:min-h-32 sm:px-2.5 sm:pb-2.5">
+        <div class="flex items-center justify-center gap-2.5">
+            <a href="#" class="hidden h-6 w-6 place-items-center rounded-md border border-[#cbd0d5] text-xs text-white sm:grid" aria-label="Profile information"><i class="fa-solid fa-info"></i></a>
+            <img class="h-12 w-12 rounded-lg border-2 border-[#f0f0f0] bg-white object-cover p-1 sm:h-20 sm:w-20 sm:rounded-xl" src="<%= request.getContextPath() %>/static/assets/images/stolen_logo.jpg" alt="<%= displayName %> profile picture">
+            <a href="#" class="hidden h-6 w-6 place-items-center rounded-md border border-[#cbd0d5] text-xs text-white sm:grid" aria-label="Messages"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+        <div class="mt-1.5 hidden text-xs text-white sm:block"><%= displayName %></div>
+        <div class="mt-0.5 hidden text-xs text-[#9095a0] sm:block">Web Developer/Designer</div>
     </div>
 
-    <!-- Chat Container -->
-    <div class="flex flex-1 flex-col">
-        <!-- Chat Messages Container -->
-        <div class="bg-jakarta p-4 flex-1 border-l overflow-y-auto" id="chat-messages">
-            <%
-                List<Message> messages = (ArrayList<Message>) request.getAttribute("Messages");
+    <div class="hidden px-2 pb-2 pt-4 text-xs text-[#676d78] sm:block">Navigation</div>
+    <nav><ul class="m-0 list-none p-0">
+        <li><a href="#" class="flex h-10 items-center justify-center gap-3 border-y border-black/10 bg-[#20b49f] px-3 text-xs text-white sm:justify-start"><i class="w-3 text-center fa-solid fa-desktop"></i><span class="hidden sm:inline">Dashboard</span></a></li>
+        <li><a href="#" class="flex h-10 items-center justify-center gap-3 border-b border-black/10 px-3 text-xs hover:bg-[#252932] hover:text-white sm:justify-start"><i class="w-3 text-center fa-regular fa-copy"></i><span class="hidden sm:inline">Pages</span><i class="fa-regular fa-square-plus ml-auto hidden scale-75 sm:inline"></i></a></li>
+        <li><a href="#" class="flex h-10 items-center justify-center gap-3 border-b border-black/10 px-3 text-xs hover:bg-[#252932] hover:text-white sm:justify-start"><i class="w-3 text-center fa-regular fa-file-lines"></i><span class="hidden sm:inline">Layouts</span><i class="fa-regular fa-square-plus ml-auto hidden scale-75 sm:inline"></i></a></li>
+    </ul></nav>
 
-                if(messages != null) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")
-                            .withLocale(java.util.Locale.US)
-                            .withZone(java.time.ZoneId.of("UTC"));
+    <div class="hidden px-2 pb-2 pt-4 text-xs text-[#676d78] sm:block">Components</div>
+    <nav><ul class="m-0 list-none p-0">
+        <li><a href="#" class="flex h-10 items-center justify-center gap-3 border-b border-black/10 px-3 text-xs hover:bg-[#252932] hover:text-white sm:justify-start"><i class="w-3 text-center fa-solid fa-gears"></i><span class="hidden sm:inline">UI Kits</span><i class="fa-regular fa-square-plus ml-auto hidden scale-75 sm:inline"></i></a></li>
+        <li><a href="#" class="flex h-10 items-center justify-center gap-3 border-b border-black/10 px-3 text-xs hover:bg-[#252932] hover:text-white sm:justify-start"><i class="w-3 text-center fa-solid fa-pen"></i><span class="hidden sm:inline">Forms</span><i class="fa-regular fa-square-plus ml-auto hidden scale-75 sm:inline"></i></a></li>
+        <li><a href="#" class="flex h-10 items-center justify-center gap-3 border-b border-black/10 px-3 text-xs hover:bg-[#252932] hover:text-white sm:justify-start"><i class="w-3 text-center fa-solid fa-table-cells"></i><span class="hidden sm:inline">Tables</span><i class="fa-regular fa-square-plus ml-auto hidden scale-75 sm:inline"></i></a></li>
+        <li><a href="#" class="flex h-10 items-center justify-center gap-3 border-b border-black/10 px-3 text-xs hover:bg-[#252932] hover:text-white sm:justify-start"><i class="w-3 text-center fa-solid fa-chart-column"></i><span class="hidden sm:inline">Charts</span><i class="fa-regular fa-square-plus ml-auto hidden scale-75 sm:inline"></i></a></li>
+        <li><a href="#" class="flex h-10 items-center justify-center gap-3 border-b border-black/10 px-3 text-xs hover:bg-[#252932] hover:text-white sm:justify-start"><i class="w-3 text-center fa-solid fa-location-dot"></i><span class="hidden sm:inline">Maps</span><i class="fa-regular fa-square-plus ml-auto hidden scale-75 sm:inline"></i></a></li>
+        <li><a href="#" class="flex h-10 items-center justify-center gap-3 border-b border-black/10 px-3 text-xs hover:bg-[#252932] hover:text-white sm:justify-start"><i class="w-3 text-center fa-solid fa-sitemap"></i><span class="hidden sm:inline">Navigation Levels</span><i class="fa-regular fa-square-plus ml-auto hidden scale-75 sm:inline"></i></a></li>
+    </ul></nav>
+</aside>
 
-                    // TODO: Think about the logic for spacing on messages sent from the same user, needs a flag
-                    // and a few other things
-                    for(int i = messages.size()-1; i >= 0; i--) {
-                        Message message = messages.get(i);
-                        String messageDate = formatter.format(message.getUpdateDate());
-            %>
-            <div class="my-4 border border-transparent rounded-lg hover:border hover:border-black hover:rounded-lg hover:bg-darker-jakarta hover:transition hover:duration-75 relative user-message-box">
-                <form style="display: none">
-                    <input type="hidden" name="user-id" value="<%= message.getFromUserId() %>">
-                    <input type="hidden" name="message-id" value="<%= message.getMessageId() %>">
-                    <input type="hidden" name="message-date" value="<%= messageDate %>">
-                </form>
-                <div class="p-2 text-desert-storm">
-                    <%= message.getFromUsername() %>: <span class="message-date"><%= messageDate %></span>
-                    <!-- Trash icon in top right -->
-
-
-                    <% if(user.getUserId().equals(message.getFromUserId()) || user.getRoles().contains("Admin")) { %>
-                    <div class="absolute top-2 right-2 cursor-pointer delete-message">
-                        <i class="fas fa-trash-alt text-desert-storm hover:text-red-500"></i>
-                    </div>
-                    <% } %>
-                </div>
-                <div class="p-2 rounded-lg text-desert-storm break-all"><%= message.getContent() %></div>
-            </div>
-            <%
-                    }
-                }
-            %>
-        </div>
-        <!-- Input Message and Submit Button -->
-        <div class="bg-jakarta border-l p-4">
-            <div class="flex items-center">
-                <form id="send-message" style="display: contents;" method="post" action="<%= request.getContextPath() %>/message">
-                    <input type="hidden" name="user-id" value="<%= ((User) request.getSession().getAttribute("current_user")).getUserId() %>" />
-                    <input type="hidden" name="to-user-id" value="" />
-                    <input type="hidden" name="to-username" value="" />
-
-                    <input id="message-input" autocomplete="off" name="message-content" type="text" class="w-full p-2 rounded-l-md border border- outline-none bg-darker-jakarta text-desert-storm" placeholder="Type your message...">
-                    <button type="submit"  class="bg-light-scarlet-gum hover:bg-lighter-scarlet-gum text-white p-2 rounded-r-md">Send</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
+<main class="ml-16 flex min-h-screen flex-col bg-[#f2f3f3] pt-10 sm:ml-40">
+    <div class="flex h-6 items-center gap-2 border-b border-[#e1e3e4] bg-[#fafafa] px-3 text-xs text-[#777c83]"><span>Home</span><i class="fa-solid fa-chevron-right scale-75"></i><span>Dashboard</span></div>
+    <section class="flex-1" aria-label="Empty dashboard content"></section>
 </main>
-<%@ include file="footer.jsp" %>
+</body>
+</html>

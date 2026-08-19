@@ -9,12 +9,29 @@ import com.brewery.web.frontend.message.MessageEvent.buildMessageWebsocket
 import io.udash.wrappers.jquery.{EventName, JQuery, JQueryAjaxSettings, JQueryCallback, JQueryEvent, JQueryXHR, jQ}
 import org.scalajs.dom.{Element, HTMLFormElement, URLSearchParams, WebSocket, document, window}
 
+import scala.annotation.static
 import scala.scalajs.js
 import scala.scalajs.js.JSON
 import scala.scalajs.js.annotation.*
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 object PageInitializers {
+    
+    def initialize(): Unit = {
+        // header
+        jQ("#logout").on(EventName.click, (element: Element, jQueryEvent: JQueryEvent) => {
+            jQueryEvent.preventDefault();
+            
+            jQ.ajax(js.Dynamic.literal(
+                url = "/account/logout",
+                method = "POST",
+                success = (data: js.Any, textStatus: String, jqXHR: JQueryXHR) => { 
+                    window.location.href = "/";
+                }
+            ).asInstanceOf[JQueryAjaxSettings])
+        })
+        
+    }
     
     def conversations(): Unit = {
         val messages: JQuery = jQ("#chat-messages");

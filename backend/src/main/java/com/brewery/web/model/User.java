@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-
-
 @Table(value = "user_table")
 public class User {
 
@@ -89,9 +87,9 @@ public class User {
     @CassandraType(type = CassandraType.Name.SET, typeArguments = { CassandraType.Name.UUID })
     private Set<UUID> blockedUsers;
     
-    @Column(value = "api_auth_token")
+    @Column(value = "auth_api_token")
     @CassandraType(type = CassandraType.Name.UUID)
-    private UUID apiAuthToken;
+    private UUID authApiToken;
 
     @Transient
     private List<String> roles;
@@ -106,7 +104,7 @@ public class User {
                 String lastName, String fullName,
                 String languagePreference, String timezone, Instant lastLoginDate,
                 VerificationStatus accountVerificationStatus, Boolean twoFactorAuthentication,
-                Set<UUID> friendsConnections, Set<UUID> blockedUsers, UUID apiAuthToken
+                Set<UUID> friendsConnections, Set<UUID> blockedUsers, UUID authApiToken
     ) {
         this.userId = userId;
         this.createDate = createDate;
@@ -125,7 +123,7 @@ public class User {
         this.twoFactorAuthentication = twoFactorAuthentication;
         this.friendsConnections = friendsConnections;
         this.blockedUsers = blockedUsers;
-        this.apiAuthToken = apiAuthToken;
+        this.authApiToken = authApiToken;
     }
 
     public enum VerificationStatus {
@@ -308,12 +306,12 @@ public class User {
         return this.conversations;
     }
 
-    public UUID getApiAuthToken() {
-        return this.apiAuthToken;
+    public UUID getAuthApiToken() {
+        return this.authApiToken;
     }
 
-    public void setApiAuthToken(UUID apiAuthToken) {
-        this.apiAuthToken = apiAuthToken;
+    public void setAuthApiToken(UUID authApiToken) {
+        this.authApiToken = authApiToken;
     }
 
     @Override

@@ -1,89 +1,57 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="com.brewery.web.model.User" %>
 <%
     User user = (User) request.getSession().getAttribute("current_user");
+    String displayName = user == null ? "John Doe" : user.getUsername();
 %>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="<%= request.getContextPath() %>/static/js/main.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script type="text/javascript">
-        {
-            const colors = new Object();
-            colors["black"] = "#010101";
-            colors["desert-storm"] = "#f8f9f7";
-            colors["boulder"] = "#767676";
-            colors["gray-nickel"] = "#bcbcbb";
-            colors["jakarta"] = "#362c5f";
-            colors["darker-jakarta"] = "#261f42";
-            colors["lighter-scarlet-gum"] = "#a355d2";
-            colors["light-scarlet-gum"] = "#71299c";
-            colors["scarlet-gum"] = "#44195e";
-            colors["blaze-orange"] = "#fc6601";
-            colors["sandy-brown"] = "#ef955d";
-            colors["hawaiian-tan"] = "#924518";
-
-            const extend = new Object();
-            extend["colors"] = colors;
-
-            const theme = new Object();
-            theme["extend"] = extend;
-
-            const config = new Object();
-            config["theme"] = theme;
-
-            tailwind["config"] = config;
-        }
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "desert-storm": "#f8f9f7",
+                        "boulder": "#767676",
+                        "gray-nickel": "#bcbcbb",
+                        "jakarta": "#362c5f",
+                        "darker-jakarta": "#261f42",
+                        "lighter-scarlet-gum": "#a355d2",
+                        "light-scarlet-gum": "#71299c",
+                        "scarlet-gum": "#44195e",
+                        "blaze-orange": "#fc6601",
+                        "sandy-brown": "#ef955d",
+                        "hawaiian-tan": "#924518"
+                    }
+                }
+            }
+        };
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="<%= request.getContextPath() %>/static/js/main.js"></script>
 </head>
-<body>
-<div class="flex flex-col h-screen">
-    <header>
-        <nav class="bg-gradient-to-t from-jakarta to-scarlet-gum">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-                    <!-- Logo -->
-                    <div class="flex-shrink-0">
-                        <img class="object-scale-down h-14 w-full" src="<%= request.getContextPath() %>/static/assets/images/stolen_logo.jpg" alt="stolen Logo">
-                    </div>
-
-                    <!-- Navigation Links -->
-                    <div class="hidden md:block">
-                        <ul class="ml-4 flex space-x-4">
-                            <li><a href="#" class="text-gray-300 hover:text-white">Home</a></li>
-                            <li><a href="#" class="text-gray-300 hover:text-white">About</a></li>
-                            <li><a href="#" class="text-gray-300 hover:text-white">Services</a></li>
-                            <li><a href="#" class="text-gray-300 hover:text-white">Portfolio</a></li>
-                            <li><a href="#" class="text-gray-300 hover:text-white">Contact</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Mobile Menu Button (hidden on larger screens) -->
-                    <div class="md:hidden">
-                        <button class="text-white hover:text-gray-300 focus:outline-none">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mobile Menu (hidden on larger screens) -->
-            <div class="md:hidden">
-                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                    <a href="#" class="text-gray-300 hover:text-white">Home</a>
-                    <a href="#" class="text-gray-300 hover:text-white">About</a>
-                    <a href="#" class="text-gray-300 hover:text-white">Services</a>
-                    <a href="#" class="text-gray-300 hover:text-white">Portfolio</a>
-                    <a href="#" class="text-gray-300 hover:text-white">Contact</a>
-                </div>
-            </div>
-        </nav>
-    </header>
+<body class="m-0 min-h-screen bg-[#f2f3f3] font-sans text-[#30343b]">
+<header class="fixed inset-x-0 top-0 z-50 flex h-10 bg-[#1f2229] text-[#d8dadd]">
+    <a href="<%= request.getContextPath() %>/" class="flex w-16 shrink-0 items-center justify-center bg-[#20b49f] text-lg font-light text-white sm:w-40 sm:justify-start sm:px-9 sm:text-xl">
+        <span class="sm:hidden">JA</span><span class="hidden whitespace-nowrap sm:inline">Joli Admin</span>
+    </a>
+    <div class="flex min-w-0 flex-1 items-center justify-between px-3.5">
+        <div class="flex items-center gap-2">
+            <button type="button" class="grid h-7 w-7 place-items-center hover:bg-white/5 hover:text-white" aria-label="Toggle navigation"><i class="fa-solid fa-bars-staggered"></i></button>
+            <label class="relative hidden w-24 sm:block">
+                <i class="fa-solid fa-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 text-xs text-[#9da1a8]"></i>
+                <input type="search" class="h-6 w-full rounded-sm border border-[#292d35] bg-[#181b22] py-0 pl-7 pr-2 text-xs text-[#dfe1e4] outline-none" placeholder="Search..." aria-label="Search">
+            </label>
+        </div>
+        <div class="flex items-center gap-2">
+            <button type="button" class="relative grid h-7 w-7 place-items-center hover:bg-white/5 hover:text-white" aria-label="Tasks"><i class="fa-solid fa-list"></i><span class="absolute -right-1 -top-1 min-w-4 scale-75 rounded-sm bg-[#20b49f] px-1 text-center text-xs leading-4 text-white">3</span></button>
+            <button type="button" class="relative grid h-7 w-7 place-items-center hover:bg-white/5 hover:text-white" aria-label="Notifications"><i class="fa-solid fa-bell"></i><span class="absolute -right-1 -top-1 min-w-4 scale-75 rounded-sm bg-[#e45151] px-1 text-center text-xs leading-4 text-white">4</span></button>
+            <a id="logout" href="#" class="grid h-7 w-7 place-items-center hover:bg-white/5 hover:text-white" aria-label="Log out"><i class="fa-solid fa-right-from-bracket"></i></a>
+        </div>
+    </div>
+</header>

@@ -1172,6 +1172,7 @@ $h_Lcom_brewery_web_frontend_Main$.prototype = $c_Lcom_brewery_web_frontend_Main
 $c_Lcom_brewery_web_frontend_Main$.prototype.main__AT__V = (function(args) {
   var pathname = $as_T(window.location.pathname);
   $($m_sjs_js_Any$().fromFunction0__F0__sjs_js_Function0(new $c_sr_AbstractFunction0_$$Lambda$a02b774b97db8234e08c6a02dd06557c99779855((() => {
+    $m_Lcom_brewery_web_frontend_dom_PageInitializers$().initialize__V();
     matchResult1: {
       var x1 = $n($m_Lcom_brewery_web_frontend_Main$().Lcom_brewery_web_frontend_Main$__f_methods).get__O__s_Option(pathname);
       if ((x1 instanceof $c_s_Some)) {
@@ -1463,6 +1464,23 @@ $c_Lcom_brewery_web_frontend_dom_PageInitializers$.prototype.constructor = $c_Lc
 function $h_Lcom_brewery_web_frontend_dom_PageInitializers$() {
 }
 $h_Lcom_brewery_web_frontend_dom_PageInitializers$.prototype = $c_Lcom_brewery_web_frontend_dom_PageInitializers$.prototype;
+$c_Lcom_brewery_web_frontend_dom_PageInitializers$.prototype.initialize__V = (function() {
+  $m_Lio_udash_wrappers_jquery_JQuery$();
+  var jquery = $("#logout");
+  new $c_Lio_udash_wrappers_jquery_JQuery$JQueryWrapper(jquery).on__T__F2__Lio_udash_wrappers_jquery_JQuery("click", new $c_sr_AbstractFunction2_$$Lambda$286cbfc6187197affcadc8465aaec93d6b7d20dc(((element, jQueryEvent) => {
+    jQueryEvent.preventDefault();
+    var $x_4 = $;
+    var $x_3 = $m_sr_ScalaRunTime$();
+    var $x_2 = new $c_T2("url", "/account/logout");
+    var $x_1 = new $c_T2("method", "POST");
+    var _2 = $m_sjs_js_Any$().fromFunction3__F3__sjs_js_Function3(new $c_sr_AbstractFunction3_$$Lambda$26e0a25d9b29f6b82ea50ab7badf4fb70c5c74e1(((data, textStatus, jqXHR) => {
+      $as_T(textStatus);
+      window.location.href = "/";
+    })));
+    var fields = $x_3.wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([$x_2, $x_1, new $c_T2("success", _2)]));
+    return $x_4.ajax($m_sjs_js_special_package$().objectLiteral__sci_Seq__sjs_js_Object(fields));
+  })));
+});
 $c_Lcom_brewery_web_frontend_dom_PageInitializers$.prototype.conversations__V = (function() {
   var messages = $("#chat-messages");
   var x = $uI($n(($m_Lio_udash_wrappers_jquery_JQuery$(), new $c_Lio_udash_wrappers_jquery_JQuery$JQueryWrapper(messages)).get__I__s_Option(0)).get__O().scrollHeight);

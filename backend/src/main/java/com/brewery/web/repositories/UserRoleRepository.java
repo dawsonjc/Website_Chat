@@ -15,6 +15,6 @@ import java.util.UUID;
 public interface UserRoleRepository extends CassandraRepository<UserRole, UUID> {
 
     @AllowFiltering
-    @Query(value = "SELECT * FROM user_roles WHERE userid = :userId ALLOW FILTERING", allowFiltering = true)
+    @Query(value = "SELECT * FROM user_role WHERE userid = :userId ALLOW FILTERING", allowFiltering = true)
     public List<UserRole> getAllRoleByUserId(@Param(value = "userId") UUID userId);
 }

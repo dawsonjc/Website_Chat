@@ -1,0 +1,51 @@
+-- Query cookbook only; Docker Compose does not execute this file.
+-- Bind <values> in prepared statements and paginate with driver paging state.
+USE mykeyspacename;
+
+-- Organization/company/account
+-- SELECT * FROM crm_organizations_by_id WHERE workspace_id=<workspace_id> AND organization_id=<organization_id>;
+-- SELECT * FROM crm_organizations_by_owner WHERE workspace_id=<workspace_id> AND owner_user_id=<user_id> AND status='ACTIVE' LIMIT 50;
+-- SELECT * FROM crm_organization_ids_by_name WHERE workspace_id=<workspace_id> AND normalized_name='<name>';
+-- SELECT * FROM crm_organization_ids_by_domain WHERE workspace_id=<workspace_id> AND email_domain='<domain>';
+-- Contact
+-- SELECT * FROM crm_contacts_by_id WHERE workspace_id=<workspace_id> AND contact_id=<contact_id>;
+-- SELECT * FROM crm_contacts_by_organization WHERE workspace_id=<workspace_id> AND organization_id=<organization_id> AND status='ACTIVE' LIMIT 50;
+-- SELECT * FROM crm_contacts_by_owner WHERE workspace_id=<workspace_id> AND owner_user_id=<user_id> AND status='ACTIVE' LIMIT 50;
+-- SELECT * FROM crm_contact_ids_by_email WHERE workspace_id=<workspace_id> AND normalized_email='<email>';
+-- Lead
+-- SELECT * FROM crm_leads_by_id WHERE workspace_id=<workspace_id> AND lead_id=<lead_id>;
+-- SELECT * FROM crm_leads_by_owner_status WHERE workspace_id=<workspace_id> AND owner_user_id=<user_id> AND status='NEW' LIMIT 50;
+-- SELECT * FROM crm_lead_ids_by_email WHERE workspace_id=<workspace_id> AND normalized_email='<email>';
+-- Pipeline/stage
+-- SELECT * FROM crm_pipelines_by_workspace WHERE workspace_id=<workspace_id> AND status='ACTIVE';
+-- SELECT * FROM crm_pipeline_stages_by_pipeline WHERE workspace_id=<workspace_id> AND pipeline_id=<pipeline_id>;
+-- Deal/opportunity
+-- SELECT * FROM crm_deals_by_id WHERE workspace_id=<workspace_id> AND deal_id=<deal_id>;
+-- SELECT * FROM crm_deals_by_pipeline_stage WHERE workspace_id=<workspace_id> AND pipeline_id=<pipeline_id> AND stage_id=<stage_id> LIMIT 100;
+-- SELECT * FROM crm_deals_by_owner_status WHERE workspace_id=<workspace_id> AND owner_user_id=<user_id> AND status='OPEN' AND expected_close_date >= '2026-08-01' AND expected_close_date <= '2026-08-31';
+-- SELECT * FROM crm_deals_by_organization WHERE workspace_id=<workspace_id> AND organization_id=<organization_id> AND status='OPEN' LIMIT 50;
+-- SELECT * FROM crm_deals_by_contact WHERE workspace_id=<workspace_id> AND contact_id=<contact_id> AND status='OPEN' LIMIT 50;
+-- Task
+-- SELECT * FROM crm_tasks_by_id WHERE workspace_id=<workspace_id> AND task_id=<task_id>;
+-- SELECT * FROM crm_tasks_by_owner_due_month WHERE workspace_id=<workspace_id> AND owner_user_id=<user_id> AND status='OPEN' AND due_month='2026-08' AND due_at >= '<from>' AND due_at < '<to>';
+-- SELECT * FROM crm_tasks_by_entity WHERE workspace_id=<workspace_id> AND entity_type='DEAL' AND entity_id=<deal_id> AND status='OPEN';
+-- Notes/activities
+-- SELECT * FROM crm_notes_by_entity WHERE workspace_id=<workspace_id> AND entity_type='CONTACT' AND entity_id=<contact_id> LIMIT 50;
+-- SELECT * FROM crm_activities_by_entity WHERE workspace_id=<workspace_id> AND entity_type='ORGANIZATION' AND entity_id=<organization_id> LIMIT 50;
+-- SELECT * FROM crm_activities_by_owner_day WHERE workspace_id=<workspace_id> AND owner_user_id=<user_id> AND activity_day='2026-08-18' LIMIT 100;
+-- Add `AND created_time < <cursor>` or `AND occurred_time < <cursor>` for timeline cursors.
+-- Team
+-- SELECT * FROM crm_teams_by_workspace WHERE workspace_id=<workspace_id> AND status='ACTIVE';
+-- SELECT * FROM crm_team_members_by_team WHERE workspace_id=<workspace_id> AND team_id=<team_id>;
+-- SELECT * FROM crm_teams_by_user WHERE workspace_id=<workspace_id> AND user_id=<user_id>;
+-- Existing user/role/conversation/message/event tables
+-- SELECT * FROM user_table WHERE userid=<user_id>;
+-- SELECT * FROM user_role WHERE userid=<user_id>;
+-- SELECT * FROM conversations WHERE conversationid=<conversation_id>;
+-- SELECT * FROM messages_by_conversation_id WHERE conversation_id=<conversation_id> LIMIT 50;
+-- SELECT * FROM events WHERE user_id=<user_id> LIMIT 50;
+-- SELECT * FROM events_by_type WHERE user_id=<user_id> AND event_type='<type>' LIMIT 50;
+-- SELECT * FROM unread_events WHERE user_id=<user_id> LIMIT 50;
+
+-- Write the canonical *_by_id row and each read projection. When a projected
+-- key changes, delete its old complete primary key before inserting the new row.

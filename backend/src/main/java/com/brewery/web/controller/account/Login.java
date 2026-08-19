@@ -59,7 +59,7 @@ public class Login {
             return ResponseEntity.status(401).body(respJson);
         }
         user.setLastLoginDate(Instant.now());
-        user.setApiAuthToken(UUID.randomUUID());
+        user.setAuthApiToken(UUID.randomUUID());
         this.userService.save(user); // last login date
 
         respJson.put("success", true);

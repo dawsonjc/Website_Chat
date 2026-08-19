@@ -19,9 +19,13 @@ public class Index {
     @Autowired
     private ConversationService conversationService;
 
+    @GetMapping(value = { "/global-chat" })
+    public String globalChat(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        return "redirect:/conversations?conversationId=" + this.conversationService.getGlobalChat().conversationId();
+    }
 
     @GetMapping(value = { "/" })
     public String index(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        return "redirect:/conversations?conversationId=" + this.conversationService.getGlobalChat().conversationId();
+        return "index";
     }
 }
