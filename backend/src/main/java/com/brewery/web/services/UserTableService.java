@@ -1,5 +1,6 @@
 package com.brewery.web.services;
 
+import com.brewery.web.controller.account.Register;
 import com.brewery.web.dto.ConversationDTO;
 import com.brewery.web.model.record.RecordStatus;
 import com.brewery.web.model.Role;
@@ -76,19 +77,20 @@ public class UserTableService {
         return this.repo.getUnverifiedUsers();
     }
 
-    public User register(User user) {
+    public User register(Register.RegisterFormData registerFormData) {
         Instant now = Instant.now();
 
-        String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(10));
+        String hashed = BCrypt.hashpw(registerFormData.password(), BCrypt.gensalt(10));
 
         UUID userId = UUID.randomUUID();
 
+        User user = new User();
         user.setUserId(userId);
         user.setCreateDate(now);
         user.setUpdateDate(now);
         user.setStatus(RecordStatus.ACTIVE);
         user.setPassword(hashed);
-        user.setFullName(user.getFirstName() + " " + user.getLastName());
+        user.setFullName(registerFormData.firstName() + " " + registerFormData.lastName());
         user.setLanguagePreference("en");
         user.setTimezone("en/us");
         user.setAccountVerificationStatus(User.VerificationStatus.PENDING);

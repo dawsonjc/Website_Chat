@@ -6,7 +6,9 @@ import com.brewery.web.frontend.facades.DOMPurify
 object Main {
     private val methods: Map[String, () => Unit] = Map[String, () => Unit](
         "/conversations" -> PageInitializers.conversations,
-        "/account/login" -> PageInitializers.login
+        "/account/login" -> PageInitializers.login,
+        "/account/register" -> PageInitializers.register,
+        "/admin" -> PageInitializers.admin
     );
     
     def main(args: Array[String]): Unit = {

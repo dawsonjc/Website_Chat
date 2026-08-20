@@ -1,7 +1,7 @@
 package com.brewery.web.frontend.dom
 
 import com.brewery.web.frontend.HelpFunctions
-import com.brewery.web.frontend.account.Login
+import com.brewery.web.frontend.account.{Login, Registration}
 import com.brewery.web.frontend.admin.Admin
 import com.brewery.web.frontend.conversation.ConversationBox
 import com.brewery.web.frontend.message.MessageEvent
@@ -25,7 +25,7 @@ object PageInitializers {
             jQ.ajax(js.Dynamic.literal(
                 url = "/account/logout",
                 method = "POST",
-                success = (data: js.Any, textStatus: String, jqXHR: JQueryXHR) => { 
+                success = (data: js.Any, textStatus: String, jqXHR: JQueryXHR) => {
                     window.location.href = "/";
                 }
             ).asInstanceOf[JQueryAjaxSettings])
@@ -63,7 +63,14 @@ object PageInitializers {
     }
     
     def register(): Unit = {
-    
+        val registerFormValidation: (Element, JQueryEvent) => scala.Any = (element: Element, jQueryEvent: JQueryEvent) => {
+            jQueryEvent.preventDefault()
+            Registration.register(element.asInstanceOf[HTMLFormElement]);
+        }
+        
+        jQ("#register-form").on(EventName.submit, (element: Element, jQueryEvent: JQueryEvent) => {
+            registerFormValidation(element, jQueryEvent);
+        });
     }
     
     def admin(): Unit = {

@@ -24,13 +24,28 @@ public class Register {
 
     @PostMapping(value = { "/register" })
     public String register(
-            @ModelAttribute("register_user") User userData
+            RegisterFormData userData
     ) {
-        if(this.userService.userExists(userData.getEmail())) {
+        System.err.println(userData.toString());
+        if(this.userService.userExists(userData.email())) {
             return null;
         }
-        this.userService.register(userData);
+        // this.userService.register(userData);
 
         return "redirect:/account/login";
+    }
+
+    public record RegisterFormData(String firstName, String lastName, String username, String email, String password) {
+
+        @Override
+        public String toString() {
+            return "RegisterFormData{" +
+                    "firstName='" + firstName + '\'' +
+                    ", lastName='" + lastName + '\'' +
+                    ", username='" + username + '\'' +
+                    ", email='" + email + '\'' +
+                    ", password='" + password + '\'' +
+                    '}';
+        }
     }
 }
