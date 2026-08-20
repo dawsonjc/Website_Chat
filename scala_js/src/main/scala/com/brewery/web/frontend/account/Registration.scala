@@ -90,7 +90,7 @@ object Registration {
             passwordElement.before(element);
             return;
         } else {
-            emailElement.removeClass(
+            passwordElement.removeClass(
                 "border-red-500 text-red-900 placeholder-red-300 " +
                     "ring-1 ring-red-500 focus:ring-2 focus:ring-red-500 " +
                     "focus:border-red-500 " +

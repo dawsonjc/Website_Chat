@@ -1,7 +1,7 @@
 package com.brewery.web.services;
 
-import com.brewery.web.controller.account.Register;
 import com.brewery.web.dto.ConversationDTO;
+import com.brewery.web.dto.formdata.RegisterFormData;
 import com.brewery.web.model.record.RecordStatus;
 import com.brewery.web.model.Role;
 import com.brewery.web.model.User;
@@ -31,6 +31,9 @@ public class UserTableService {
     private RoleService roleService;
 
     public boolean userExists(String email) {
+        if(email == null) {
+            return false;
+        }
         UUID userId = this.getUserIdByEmail(email);
         return userId != null;
     }
@@ -77,7 +80,7 @@ public class UserTableService {
         return this.repo.getUnverifiedUsers();
     }
 
-    public User register(Register.RegisterFormData registerFormData) {
+    public User register(RegisterFormData registerFormData) {
         Instant now = Instant.now();
 
         String hashed = BCrypt.hashpw(registerFormData.password(), BCrypt.gensalt(10));
@@ -89,7 +92,11 @@ public class UserTableService {
         user.setCreateDate(now);
         user.setUpdateDate(now);
         user.setStatus(RecordStatus.ACTIVE);
+        user.setUsername(registerFormData.username());
+        user.setEmail(registerFormData.email());
         user.setPassword(hashed);
+        user.setFirstName(registerFormData.firstName());
+        user.setLastName(registerFormData.lastName());
         user.setFullName(registerFormData.firstName() + " " + registerFormData.lastName());
         user.setLanguagePreference("en");
         user.setTimezone("en/us");
@@ -105,9 +112,11 @@ public class UserTableService {
         userRole.setUpdateDate(now);
         userRole.setStatus(RecordStatus.ACTIVE);
 
+        user.setRoles(List.of(defaultRole.getRoleName()));
+        User savedUser = this.repo.save(user);
         this.userRolesService.save(userRole);
 
-        return this.repo.save(user);
+        return savedUser;
     }
 
     public void save(User user) {
