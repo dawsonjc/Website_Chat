@@ -25,7 +25,7 @@ public class EventsByType {
     private EventType eventType;
 
     @PrimaryKeyColumn(name ="event_id", ordinal = 2, type = PrimaryKeyType.CLUSTERED)
-    @CassandraType(type = CassandraType.Name.UUID)
+    @CassandraType(type = CassandraType.Name.TIMEUUID)
     private UUID eventId;
 
     @Column(value = "create_date")

@@ -1382,7 +1382,7 @@ $c_Lcom_brewery_web_frontend_account_Registration$.prototype.register__Lorg_scal
     passwordElement.before(element$2);
     return (void 0);
   } else {
-    emailElement.removeClass("border-red-500 text-red-900 placeholder-red-300 ring-1 ring-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.45)]").addClass("border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500");
+    passwordElement.removeClass("border-red-500 text-red-900 placeholder-red-300 ring-1 ring-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.45)]").addClass("border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500");
   }
   var $x_9 = $;
   var $x_8 = $m_sr_ScalaRunTime$();

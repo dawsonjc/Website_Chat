@@ -150,8 +150,8 @@ CREATE TABLE IF NOT EXISTS  mykeyspacename.unread_events (
             'compaction_window_unit': 'DAYS'
             };
 
-CREATE INDEX IF NOT EXISTS ON mykeyspacename.events (is_read);
-CREATE INDEX IF NOT EXISTS ON mykeyspacename.events (event_type);
+CREATE INDEX IF NOT EXISTS ON mykeyspacename.event (is_read);
+CREATE INDEX IF NOT EXISTS ON mykeyspacename.event (event_type);
 
 CREATE INDEX IF NOT EXISTS ON mykeyspacename.conversations (users);
 

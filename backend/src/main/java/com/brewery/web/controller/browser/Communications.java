@@ -20,6 +20,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,8 +44,14 @@ public class Communications {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")
                 .withZone(ZoneOffset.UTC);
-        LocalDateTime dateTime = LocalDateTime.parse(createDate, formatter);
-        Instant instant = dateTime.toInstant(ZoneOffset.UTC);
+        Instant instant;
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(createDate, formatter);
+            instant = dateTime.toInstant(ZoneOffset.UTC);
+        } catch(DateTimeParseException e) {
+            return ResponseEntity.badRequest().body(responseJson);
+        }
+
 
         List<Message> messagesBeforeDate = this.service.getMessagesByConversationIdAndBeforeCreateDate(conversationId, instant);
 
